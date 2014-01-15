@@ -20,7 +20,7 @@ DEPS := ${SRCS:.c=.dep}
 CFLAGS := -std=c99 -pedantic -Wall `sdl-config --cflags`
 DEBUG := -g3 -O0
 LDFLAGS :=
-LIBS := -lGLEW -lSDL -lGL -lGLU -lSDL_ttf -lm -DGL_GLEXT_PROTOTYPES  \
+LIBS := -lSDL -lGL -lGLU -lSDL_ttf -lm -DGL_GLEXT_PROTOTYPES  \
         `sdl-config --libs`            \
         `pkg-config SDL_ttf --libs`    \
         `pkg-config SDL_image --libs`  \
