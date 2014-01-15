@@ -240,3 +240,5 @@ Look for comments like //... in all files: $ grep -n '//\.\.\.' *.{c,h}
 Kill a.out: # kill -9 $(ps -a | grep a.out | awk '{ print $1 }')
 backup: $ rsync -avz ~/project/may_first/ viator:~/project/may_first
 List used libraries: ldd a.out
+.../dev/$ git add . -u   $ git commit   $ git push
+.../dev/$ git rm this.swp -f   $ git status

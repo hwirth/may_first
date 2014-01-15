@@ -1,4 +1,5 @@
 *.dep
 *.o
+*.swp
 git_cheat_sheet.txt
 a.out
