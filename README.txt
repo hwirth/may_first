@@ -4,12 +4,12 @@
                  Written 2013 by hmw, http://harald.ist.org/
 
 Index
-	1. Introduction
-	2. Gameplay
-	3. Building from source
-	4. Mode of operation
-	5. Beta testing questionaire
-	6. TODO
+  1. Introduction
+  2. Gameplay
+  3. Building from source
+  4. Mode of operation
+  5. Beta testing questionaire
+  6. TODO
 
 
 *******************************************************************************
@@ -78,25 +78,35 @@ the playing field every now and then to keep the number of enemies low.
 You may need to install a few packages before you can compile the program.
 Under Debian 7.1 I had to issue:
 
-	$ sudo apt-get install      \
-		libsdl-image1.2-dev \
-		libglew-dev         \
-		libsdl-ttf2.0-dev   \
-		libsdl-mixer1.2-dev \
-		libsdl-gfx1.2-dev
+  $ sudo apt-get install      \
+    libsdl-image1.2-dev \
+    libsdl-ttf2.0-dev   \
+    libsdl-mixer1.2-dev \
+    libsdl-gfx1.2-dev
+
+    #libglew-dev
+
+Under Fedora 20 I used:
+  $ su -c 'yum install  \
+    SDL_image-devel     \
+    SDL_ttf-devel       \
+    SDL_mixer-devel     \
+    SDL_gfx-devel       \
+    '
+    #libGLEW
 
 Compile the program with:
 
-	$ make clean && make && mv a.out may_first
+  $ make clean && make && mv a.out may_first
 
 Start the program:
 
-	$ ./may_first
+  $ ./may_first
 
 If the linker should complain about the package "SDL_ttf" not being found in
 the pkg-config path, this helped me:
 
-	cp ./SDL_ttf.pc /usr/share/pkgconfig
+  cp ./SDL_ttf.pc /usr/share/pkgconfig
 
 
 *******************************************************************************
