@@ -1,0 +1,38 @@
+laser.wav
+	License: Unknown
+	http://soundjax.com/laser-1.html (LASER1.WAV)
+	http://cd.textfiles.com/10000soundssongs/DISCLAIM.TXT
+
+punch.wav
+	License: Attribution 3.0
+	Recorded by Mark DiAngelo
+	http://soundbible.com/1876-Punch-HD.html
+
+blast.wav
+	License: Attribution 3.0
+	Recorded by Mike Koenig
+	http://soundbible.com/538-Blast.html
+
+denied.wav
+	License: Unknown
+	http://mp3skull.com/mp3/error_wav.html (0RROR.WAV.mp3)
+
+alarm.wav
+	License: Attribution 3.0
+	Recorded by Mike Koenig
+	http://soundbible.com/287-Industrial-Alarm.html
+
+blub.wav
+	License: Attribution 3.0
+	Recorded by snottyboy
+	http://soundbible.com/1345-Large-Bubble.html
+
+stars_background.jpg
+	http://kidface.deviantart.com/art/Stars-392896212
+	(c) 2013 kidface
+
+neu4_run.ogg
+hit.wav
+digits.png
+	License: Copyleft
+	http://harald.ist.org/
