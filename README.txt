@@ -64,12 +64,9 @@ Taking a hit with Resource below 50 leads to death and the end of the game.
 
 LEVEL DESIGN
 ------------
-There is no level design yet, SPAWNING OF NEW ENEMIES is simply triggered by
-killing existing ones. Currently there is only an ugly routine calculating the
-probabilities of type and number of new enemies.
-
-The ROUND SHOT DOES NOT TRIGGER NEW ENEMIES, so you should use it to "clean up"
-the playing field every now and then to keep the number of enemies low.
+In version 0.2.3, a new procedural level design routine has been added. It is
+still somewhat boring, because the waves look similar except for the amount of
+enemies. Better level design is in preparation.
 
 
 *******************************************************************************
