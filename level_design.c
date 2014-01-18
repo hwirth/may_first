@@ -207,7 +207,9 @@ void create_wave2(
 	for( fsize = MAX_FORMATION_SIZE ; fsize > 1 ; fsize-- ) {
 		while (amount > 2*fsize*fsize) {
 			f = &(GS->formations[fi]);
-			f->nr_ranks = create_formation( GS, f, tier, fsize, fi, nr_units );
+			f->nr_ranks = create_formation(
+				GS, f, tier, fsize, fi, nr_units
+			);
 			create_formation_enemies( GS, f, tier, fsize*fsize );
 
 			++fi;
@@ -218,7 +220,9 @@ void create_wave2(
 	// Create remaining amount as single enemies
 	for( fsize = 1 ; amount > 0 ; amount-- ) {
 		f = &(GS->formations[fi]);
-		f->nr_ranks = create_formation( GS, f, tier, fsize, fi, nr_units );
+		f->nr_ranks = create_formation(
+			GS, f, tier, fsize, fi, nr_units
+		);
 		create_formation_enemies( GS, f, tier, fsize*fsize );
 
 		++fi;
@@ -324,6 +328,7 @@ void prepare_first_level( game_state_t* GS )
 {
 	GS->shots_fired		= 0;
 	GS->shots_missed	= 0;
+	GS->shots_en_route	= 0;
 	GS->best_resource	= 0;
 
 
@@ -336,8 +341,9 @@ void prepare_first_level( game_state_t* GS )
 	GS->next_recharge_beyond_y = RECHARGE_DISTANCE;
 	GS->next_recharge_after_us = RECHARGE_TIME;
 
-	GS->add_enemy_beyond_y = GS->ship.position.y + FIELD_HEIGHT/2; //...-->regular event at distance interval
-	GS->nr_warp_enemies = 1;	//... why 1?
+	GS->add_enemy_beyond_y = calculate_enemy_beyond_y( GS );
+	GS->nr_warp_enemies = 1;	// Next time, the player warps around,
+					// ..spawn one new enemy.
 
 	GS->black_hole.random_seed = 0;
 	generate_black_hole( GS );
@@ -348,18 +354,42 @@ void prepare_first_level( game_state_t* GS )
 
 
 /******************************************************************************
-* EVENTS
+* WARP AROUND WITHOUT KILLING ANY ENEMIES
 ******************************************************************************/
+
+real_t calculate_enemy_beyond_y( game_state_t* GS )
+{
+	return GS->ship.position.y + FIELD_HEIGHT * 1.6;
+}
+
 
 void player_warped_around( game_state_t* GS )
 {
 #if WARP_AROUND_SPAWNS_ENEMY
-	add_random_enemy( GS, GS->nr_warp_enemies, 0 );
+	int i;
+	formation_t* f = NULL;
 
-	GS->add_enemy_beyond_y		// Set y-value for..
-		= GS->ship.position.y	// ..next "warp"
-		+ FIELD_HEIGHT
-	;
+	for( i = 0 ; i < MAX_FORMATIONS ; i++ ) {
+		if (GS->formations[i].nr_ranks == 0) {
+			f = &(GS->formations[i]);
+			break;
+		}
+	}
+
+	if (f != NULL) {
+		int tier = TIER_1;
+		int fsize = 8;		//... calculate from amount
+
+		f->nr_ranks = create_formation(
+			GS, f, tier, fsize, 1, 1
+		);
+		create_formation_enemies( GS, f, tier, GS->nr_warp_enemies );
+		//... Check if formation is removed when last enemy is killed
+		//... Not critical, because new enemies will only be created,
+		//... when there are free slots.
+	}
+
+	GS->add_enemy_beyond_y = calculate_enemy_beyond_y( GS );
 
 	// Increase number of new enemies in case, the player
 	// does not kill within the next "warp"

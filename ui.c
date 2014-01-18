@@ -69,6 +69,13 @@ void init_sound( program_state_t* PS, game_state_t* GS )
 	snd->blast  = NULL;
 	snd->denied = NULL;
 	snd->alarm  = NULL;
+
+	snd->computer_autofire   = NULL;
+	snd->computer_doubleshot = NULL;
+	snd->computer_roundshot  = NULL;
+	snd->computer_danger     = NULL;
+	snd->computer_weaponlost = NULL;
+
 	snd->music  = NULL;
 
 	snd->laser  = Mix_LoadWAV( LASER_WAV  );
@@ -77,6 +84,13 @@ void init_sound( program_state_t* PS, game_state_t* GS )
 	snd->blast  = Mix_LoadWAV( BLAST_WAV  );
 	snd->denied = Mix_LoadWAV( DENIED_WAV );
 	snd->alarm  = Mix_LoadWAV( ALARM_WAV  );
+
+	snd->computer_autofire   = Mix_LoadWAV( COMPUTER_AUTOFIRE_WAV   );
+	snd->computer_doubleshot = Mix_LoadWAV( COMPUTER_DOUBLESHOT_WAV );
+	snd->computer_roundshot  = Mix_LoadWAV( COMPUTER_ROUNDSHOT_WAV  );
+	snd->computer_danger     = Mix_LoadWAV( COMPUTER_DANGER_WAV     );
+	snd->computer_weaponlost = Mix_LoadWAV( COMPUTER_WEAPONLOST_WAV );
+
 	snd->blub   = Mix_LoadWAV( BLUB_WAV   );
 
 	if (!snd->laser || !snd->hit || !snd->punch

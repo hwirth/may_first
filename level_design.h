@@ -12,7 +12,7 @@
 
 // OPTIONS ////////////////////////////////////////////////////////////////////
 
-#define WARP_AROUND_SPAWNS_ENEMY	FALSE
+#define WARP_AROUND_SPAWNS_ENEMY	TRUE
 
 
 // PROTOTYPES /////////////////////////////////////////////////////////////////
@@ -28,6 +28,7 @@ void blackhole_attracts_ship( game_state_t* GS );
 void advance_to_next_level( game_state_t* GS );
 void prepare_first_level( game_state_t* GS );
 
+real_t calculate_enemy_beyond_y( game_state_t* GS );
 void player_warped_around( game_state_t* GS );
 
 

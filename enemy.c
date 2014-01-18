@@ -8,6 +8,7 @@
 #include "game.h"
 #include "player.h"
 #include "formation.h"
+#include "level_design.h"
 #include "world.h"
 #include "ui.h"
 
@@ -185,11 +186,15 @@ void enemy_takes_hit(
 	laser_beam_t* l
 	)
 {
-	ship_t* s = &(GS->ship);
-
-
 	if (l->owner < 0) {		// Player
 		e->hit_points--;
+
+#if ENEMIES_CHANGE_DIRECTION_ON_HIT
+		e->velocity.x *= (-1);	// Change direction
+		if (e->formation != NULL) {
+			formation_turn_around( GS, e->formation );
+		}
+#endif
 	}
 
 	if (e->hit_points > 0) {
@@ -227,8 +232,8 @@ void enemy_takes_hit(
 		}
 
 		// Reset ENEMY BEYOND counter
-		GS->add_enemy_beyond_y = s->position.y + FIELD_HEIGHT/2;
-		GS->nr_warp_enemies = 1;
+		GS->add_enemy_beyond_y = calculate_enemy_beyond_y( GS );
+		GS->nr_warp_enemies = 1;	// Reset spawn amount
 
 		play_sound( GS->sounds.hit );
 	}

@@ -99,6 +99,8 @@ struct formation_rank_s {
 };
 
 struct formation_s {
+	//bool_t   active;	// Not implemented, because
+				// active == (nr_ranks != 0)
 	vector_t position;
 	vector_t velocity;
 
@@ -189,6 +191,12 @@ struct sounds_s {
 	Mix_Chunk* alarm;
 	Mix_Chunk* blub;
 
+	Mix_Chunk* computer_autofire;
+	Mix_Chunk* computer_doubleshot;
+	Mix_Chunk* computer_roundshot;
+	Mix_Chunk* computer_danger;
+	Mix_Chunk* computer_weaponlost;
+
 	Mix_Music* music;
 };
 
@@ -197,7 +205,8 @@ struct sounds_s {
 
 struct score_info_s {
 	int current;		// Collected score by killing enemies
-	int high_score;		// Overall high score
+	int high_score;		// Overall high score..
+	int high_score_level;	// ..and the level reached
 
 	int distance;		// Total score values calculated in..
 	int speed;		// .. calulate_total_score()
@@ -248,11 +257,7 @@ struct game_state_s {
 	real_t add_enemy_beyond_y;	// Penalty extra enemies, when the..
 	int nr_warp_enemies;		// ..player doesn't kill within one
 					// FIELD_HEIGHT (one "warp around")
-
-	// Prototypal
-	int formation_random_seed;
-
-}; // game_state_t
+}; // game_state_s
 
 
 /******************************************************************************

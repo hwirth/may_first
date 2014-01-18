@@ -31,6 +31,8 @@
 
 #define CURVED_FORMATIONS		FALSE	// FALSE means rectangular arrangement
 
+#define ENEMIES_CHANGE_DIRECTION_ON_HIT	FALSE	// This feature should be used for a specific (future) AI mode
+
 // DEFINES ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #define HIGHSCORE_FILENAME		"./highscore.dat"
@@ -40,6 +42,12 @@
 
 // http://lazyfoo.net/SDL_tutorials/lesson11/
 
+#define COMPUTER_AUTOFIRE_WAV		"./media_files/computer_autofire.wav"
+#define COMPUTER_DOUBLESHOT_WAV		"./media_files/computer_doubleshot.wav"
+#define COMPUTER_ROUNDSHOT_WAV		"./media_files/computer_roundshot.wav"
+#define COMPUTER_DANGER_WAV		"./media_files/computer_danger.wav"
+#define COMPUTER_WEAPONLOST_WAV		"./media_files/computer_weaponlost.wav"
+
 #define LASER_WAV			"./media_files/laser.wav"
 #define HIT_WAV				"./media_files/hit.wav"
 #define PUNCH_WAV			"./media_files/punch.wav"
@@ -47,6 +55,7 @@
 #define DENIED_WAV			"./media_files/denied.wav"
 #define ALARM_WAV			"./media_files/alarm.wav"
 #define BLUB_WAV			"./media_files/blub.wav"
+
 #define GAME_MUSIC			"./media_files/neu4_run.ogg"
 
 
@@ -185,7 +194,7 @@
 #define AI_SHOOT_BEHIND_DISTANCE	50.0		// How far behind the player an enemy still may start a weapon.
 #define AMOUNT_INITIAL_ENEMIES		3		// Size of group
 #define ENEMY_MULTIPLY_DIVISOR		10		// larger --> more rarely additional enemies will spawn
-#define ENEMY_BASE_SHOOT_INTERVAL_US	(1000000*3)	// How often a blue enemy fires
+#define ENEMY_BASE_SHOOT_INTERVAL_US	(1000000*3)	//*3 How often a blue enemy fires
 #define ENEMY_TIER_SHOOT_FACTOR		9		// How much shooting interval increases with enemy's level
 #define MOTHERSHIP_SHOOT_FACTOR		19.0		// How much shooting interval increases with enemy's level
 #define MOTHERSHIP_AGRESSIVENESS	9

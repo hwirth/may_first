@@ -443,6 +443,7 @@ void advance_laser_beam(
 			GS->shots_missed++;
 		}
 		remove_laser_beam( GS, l );
+		return;
 	}
 
 	// hitting player's ship?
@@ -455,10 +456,9 @@ void advance_laser_beam(
 			SHIP_SIZE
 			)
 		) {
-			remove_laser_beam( GS, l );
 			player_takes_hit( PS, GS, l );
-			//l->active = FALSE;
-			//GS->nr_active_lasers--;
+			remove_laser_beam( GS, l );
+			return;
 		}
 	}
 
@@ -476,8 +476,9 @@ void advance_laser_beam(
 				enemy_size(GS, e)
 				)
 			) {
-				remove_laser_beam( GS, l );
 				enemy_takes_hit( PS, GS, e, l );
+				remove_laser_beam( GS, l );
+				return;
 			}
 		}
 	}
@@ -507,6 +508,7 @@ void advance_bonus_bubbles( program_state_t* PS, game_state_t* GS )
 	ship_t* shp = &(GS->ship);
 	bonus_bubble_t* bb;
 	weapon_t* wpn;
+	int weapon_nr = -1;
 
 	const vector_t v0 = { 0,0,0 };
 
@@ -530,14 +532,17 @@ void advance_bonus_bubbles( program_state_t* PS, game_state_t* GS )
 
 				// Free up more weapons
 				switch (bb->tier) {
+				case TIER_1:
+					weapon_nr = WEAPON_AUTOFIRE;
+					wpn = &(shp->weapons[weapon_nr]);
+					break;
 				case TIER_2:
-					wpn = &(shp->weapons[WEAPON_AUTOFIRE]);
+					weapon_nr = WEAPON_LASER_2;
+					wpn = &(shp->weapons[weapon_nr]);
 					break;
 				case TIER_3:
-					wpn = &(shp->weapons[WEAPON_LASER_2]);
-					break;
-				case TIER_4:
-					wpn = &(shp->weapons[WEAPON_ROUNDSHOT]);
+					weapon_nr = WEAPON_ROUNDSHOT;
+					wpn = &(shp->weapons[weapon_nr]);
 					break;
 				default:
 					wpn = NULL;
@@ -550,6 +555,14 @@ void advance_bonus_bubbles( program_state_t* PS, game_state_t* GS )
 							wpn,
 						ACHIEVEMENT_BLINK_DURATION
 						);
+#if PLAY_COMPUTER_VOICE
+switch( weapon_nr ) {
+	case WEAPON_AUTOFIRE:  play_sound( GS->sounds.computer_autofire );   break;
+	case WEAPON_LASER_2:   play_sound( GS->sounds.computer_doubleshot ); break;
+	case WEAPON_ROUNDSHOT: play_sound( GS->sounds.computer_roundshot );  break;
+}
+#endif
+
 					}
 					wpn->enabled = TRUE;
 				}

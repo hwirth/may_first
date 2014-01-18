@@ -40,10 +40,15 @@ int create_formation_positions( formation_t* f, int formation_width )
 	int row            = 0;
 	int new_row_rank   = 0;
 	int first_row_rank = 0;
+	int row_growth     = 0;	// Prevent "uninitialized" warning
 
-	int x, row_index, row_growth;
+	int x, row_index;
 
 debugf(DEBUG_FORMATION_CREATION, "create_formation_positions():");
+if ((formation_width < 1) || (formation_width > MAX_FORMATION_SIZE)) {
+	printf("PANIC: formation_width (%d) out of bounds\n", formation_width);
+	exit(1);
+}
 
 	for( i = 0 ; i < MAX_FORMATION_RANKS ; i++ ) {
 

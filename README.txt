@@ -8,8 +8,9 @@ Index
   2. Gameplay
   3. Building from source
   4. Mode of operation
-  5. Beta testing questionaire
-  6. TODO
+  5. Change log
+  6. Beta testing questionaire
+  7. TODO
 
 
 *******************************************************************************
@@ -77,11 +78,10 @@ the playing field every now and then to keep the number of enemies low.
 
 You may need to install a few packages before you can compile the program.
 Under Debian 7.1 I had to issue:
-
-  $ sudo apt-get install      \
-    libsdl-image1.2-dev \
-    libsdl-ttf2.0-dev   \
-    libsdl-mixer1.2-dev \
+  $ sudo apt-get install \
+    libsdl-image1.2-dev  \
+    libsdl-ttf2.0-dev    \
+    libsdl-mixer1.2-dev  \
     libsdl-gfx1.2-dev
 
     #libglew-dev
@@ -128,7 +128,7 @@ main menu has been shown for some time, the program switches back to RM_INTRO.
 IMPORTANT FILES
 ---------------
 main.h     Program state, control settings, types
-ui.h       UI related settings (Full screen mode, sound)
+ui.h       UI related settings (Full screen mode, sound related options)
 presets.h  Game state control and detail settings
 game.h     "Super" struct  game_state_t .
 
@@ -142,15 +142,24 @@ draw_frame.c      Every tick, the screen is redrawn according to  PS->run_mode :
   hud.c           Draws the overlay (Score, time, menus, etc.)
   gl_helpers.c    OpenGL related aiding functions (load_texture, gl_printf, ...)
 game.c            Provides main game control and some aiding functions
-  level_design.c  Level control, functions describing game rules
-  world.c         Advances the world by one step
+  level_design.c  Level control, functions that define game rules
+  world.c         Advances the world simulation by one step
   player.c        Player specific routines (Taking hits, controls, ...)
   enemy.c         Enemy specific routines (Taking hits, AI, ...)
   formation.c     Organizes enemies into formations and provides controls
 
 
 *******************************************************************************
-* 5. BETA TESTING QUESTIONAIRE
+* 5. CHANGE LOG
+*******************************************************************************
+
+v0.2.3
+- Added computer announcements when weapon upgrades are installed or lost
+- Upgrades now obtained earlier (from lower tier enemies)
+
+
+*******************************************************************************
+* 6. BETA TESTING QUESTIONAIRE
 *******************************************************************************
 
 - OS, GPU
@@ -160,10 +169,11 @@ game.c            Provides main game control and some aiding functions
 
 
 *******************************************************************************
-* 6. TODO
+* 7. TODO
 *******************************************************************************
 
 // IDEAS //////////////////////////////////////////////////////////////////////
+? Smaller enemies run out of energy faster, dock with mothership to refuel
 ? Color-combo ("chain bonus")
 ? Enemies: stick together to form larger structures, "bonds" have hitpoints
 ? Enemies: drop only items they actually used
@@ -193,6 +203,9 @@ BUGS:
 ? When FIELD_HEIGHT is set to 1000, some enemy-polygons appear right
      in front of the camera (for one frame)
 ? New like above, but when MAX_ENEMIES changed from 100 to 256
+? Sometimes; scene.c:draw_distance_marker() When texture coordinates are not
+     applied, a shot fired by the player immediately hits the player's ship
+     (100% reproducable, if the bug occurs at all)
 *******************************************************************************
 
 // TODO v1.0 //////////////////////////////////////////////////////////////////
@@ -203,6 +216,7 @@ BUGS:
 ! Fix background image (is not properly "endless", also copyright)
 ! Use correct BPP
 ~ Rewrite: scene.c: Proper OpenGL usage
+~ Improve: Multiple sounds played at the same time --> not all played.
 > Full documentation
 > Improve CPU usage (Certain calculations are done quite expensively right now)
 > Portability (Mac, Windows, Linux, some Mobiles)
@@ -211,7 +225,7 @@ BUGS:
 ! Lasers should not only cause damage at their tips
 ! Improve font size calculated from screen resolution, also onResize
 ! check ON RESIZE effects
-? asprintf shouldnt need to free  s  all the time
+? asprintf shouldn't need to free  s  all the time
 - Improve show_text() function(s) - at least allow sizing
 - may_first.conf (keyboard, sound/music, play list, full screen)
 - Command line switches (Music, Sound, Volume, Resolution, Fullscreen)
@@ -220,19 +234,23 @@ BUGS:
 > Revisit hit detection (low FPS), see world.c
 ! Revisit: Grid/PointSize, Lasers/LineWidth
 ! Revisit: Blackhole darkness (CHEAT OFFSET?)
-! Shield: activate per key, consumes lots of resource
+! Shield: activate with a key, consumes lots of resource
 ! Super-shot: charge from resource, release key-->roundshot
+! Warp Button: Jump/Dive and speed forward some distance
+- Several formation layouts, one of them could become a "cluster-ship"
+  Nesting of formations?
 
 // TODO v0.2 //////////////////////////////////////////////////////////////////
 ~ Change to tier (1,2,3 instead of 1,3,6)
-! Formation: Don't fill when it leads out of the screen
+? Formation: Don't fill when it leads out of the screen
 ! Formation: Balanced refill depending on symmetry (diagonal refills)
+! NewEnemyAfterWarp: Sometimes you can't finish the current wave
 - INVISIBLE_FIELD_FACTOR: Controlling visible field/out of view ratio
 - FIELD_HEIGHT_FACTOR: level dependent "empty" area(s)
 - Level design instead of random enemies (Wave(s), Boss, Wave(s), Boss...)
 - Revisit: Weapon unlocking, level_design.c
 - Revisit: Warp-around-malus- vs. kill-next level enemy (kill appears at once)
-- Revisit: Shooting frequency of enemies
+  Perhaps different game modes to choose from?
 - Path: Types: Orbiting, zigzag, sine, spiral, follow, evade
 - Formation: Reintegrate enemies (growth effect)
 - Formation: various patterns, geometry growing dynamically -> most sphere like
@@ -244,7 +262,6 @@ BUGS:
 - Round-Shot: Deny-sound played multiple times?
 - Bonus x2, x3, ...
 - More models for enemies (Jelly Fish, Tetraeder-Dots)
-! HitRatio negative: check Round Shot
 
 Look for comments like //... in all files: $ grep -n '//\.\.\.' *.{c,h}
 Kill a.out: # kill -9 $(ps -a | grep a.out | awk '{ print $1 }')

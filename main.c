@@ -313,6 +313,12 @@ int main( int argc, char* argv[] )
 	Mix_FreeChunk( snd->alarm );
 	Mix_FreeChunk( snd->blub );
 
+	Mix_FreeChunk( snd->computer_autofire );
+	Mix_FreeChunk( snd->computer_doubleshot );
+	Mix_FreeChunk( snd->computer_roundshot );
+	Mix_FreeChunk( snd->computer_danger );
+	Mix_FreeChunk( snd->computer_weaponlost );
+
 	Mix_FreeMusic( snd->music );
 
 	SDL_Quit();	// Will (allegedly) also free  screen .

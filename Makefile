@@ -24,7 +24,6 @@ LIBS := -lSDL -lGL -lGLU -lSDL_ttf -lm -DGL_GLEXT_PROTOTYPES  \
         `sdl-config --libs`            \
         `pkg-config SDL_ttf --libs`    \
         `pkg-config SDL_image --libs`  \
-        `pkg-config SDL_gfx --libs`    \
 	-lSDL_mixer
 #-lX11 -lXi -lXmu
 

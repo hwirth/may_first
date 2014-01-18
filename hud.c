@@ -195,7 +195,7 @@ void hud_draw_level_nr( program_state_t* PS, game_state_t* GS )
 		LEVEL_OFFSET_Y - LEVEL_QUAD_HEIGHT - PS->line_height/2,
 		ALIGN_CENTER,
 		0x808080,
-		"LEVEL"
+		"WAVE"
 	);
 }
 
@@ -631,9 +631,20 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		x,
 		y + (i--) * (PS->line_height),
 		ALIGN_CENTER, 0xFFFFFF,
-		"HIGH SCORE: %7d          TOTAL: %7d",
-		GS->score.high_score,
+		"                             TOTAL: %7d",
 		total_score
+	);
+
+	--i;
+
+	hud_printf(
+		PS,
+		x,
+		y + (i--) * (PS->line_height),
+		ALIGN_CENTER, 0xAAAAAA,
+		"High Score: %d (Wave %d)",
+		GS->score.high_score,
+		GS->score.high_score_level
 	);
 }
 
@@ -928,6 +939,17 @@ void draw_debug( program_state_t* PS, game_state_t* GS )
 		COLOR_TEXT_LO,
 		"nr_active_enemies(%d)",
 		GS->nr_active_enemies_total
+	);
+
+	hud_printf(
+		PS,
+		PS->line_height,
+		PS->line_height*line_count++,
+		ALIGN_LEFT | ALIGN_MIDDLE,
+		COLOR_TEXT_LO,
+		"add_enemy_beyond_y(%.2f) distance(%.2f)",
+		GS->add_enemy_beyond_y,
+		GS->ship.position.y - GS->add_enemy_beyond_y
 	);
 #endif
 

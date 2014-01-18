@@ -85,20 +85,24 @@ void draw_distance_marker(
 	glBegin( GL_QUADS );
 	glColor4f( LABEL_COLOR, depth_factor );
 
-	y += LABEL_OFFSET_Y;	// Cheat offset to make numbers appear
-					// more centered vertically.
+	y += LABEL_OFFSET_Y;		// Cheat offset to make numbers appear
+					// more vertically centered.
 	z = GRID_DELTA_Z + 0.1;
 
 	while (number || draw_zero) {
 
 		digit_x = ((number % 10) / 10.0);
-		draw_zero = FALSE;	// Only draw the zero once
+		draw_zero = FALSE;	// Only draw the Zero once
 
+#if !ENABLED_CODE
+// On some builds, when the vertices and mapping coordinates are NOT created,
+// a LASER fired by the player immediately hits the player's ship.
+// If the bug occurs, it happens on every shot fired.
 	glTexCoord2f( digit_x,     1 );	glVertex3f( quad_x,   y-h/2, z );
 	glTexCoord2f( digit_x+0.1, 1 );	glVertex3f( quad_x+w, y-h/2, z );
 	glTexCoord2f( digit_x+0.1, 0 );	glVertex3f( quad_x+w, y+h/2, z );
 	glTexCoord2f( digit_x,     0 );	glVertex3f( quad_x,   y+h/2, z );
-
+#endif
 		quad_x -= LABEL_QUAD_WIDTH;
 		number /= 10;
 	}
@@ -351,8 +355,41 @@ void draw_scene_ship(
 
 		glEnd();
 
-		glPopMatrix();		// Undo roll
+		//glPopMatrix();		// Undo roll
 	}
+
+	// Draw Shields
+	{
+		real_t a, x, y, offset_x, offset_y, r, hp;
+		int j;
+
+		hp = calculate_hit_points( GS->current_resource );
+
+		glEnable( GL_BLEND );
+		glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+
+		for( j = 0 ; j < hp ; j++ ) {
+
+			r = 3 + j;
+
+			offset_x = cos(j + get_time() / 10000) / 2;
+			offset_y = sin(j + get_time() / 10000) / 2;
+
+			glColor4f( 1.0, 1.0, 1.0, 5.0/255.0 );
+			glBegin( GL_POLYGON );
+			for( i = 0 ; i < 36 ; i++ ) {
+				a = i / 36.0 * 2*M_PI;
+				x = offset_x + cos(a) * r;
+				y = offset_y + sin(a) * r;
+				glVertex3f( x, y, (real_t)j/10.0 );
+			}
+			glEnd();
+
+		}
+	}
+
+	glPopMatrix();		// Undo roll
+	glDisable( GL_BLEND );
 }
 
 /* draw_scene_enemies()

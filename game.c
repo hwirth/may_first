@@ -35,42 +35,32 @@ void blink_weapon_hud(
 
 void disable_best_weapon( program_state_t* PS, game_state_t* GS )
 {
-#if FALSE
-	weapon_t* w = GS->ship.weapons;
-
-	if (w[WEAPON_ROUNDSHOT].enabled) {
-		w[WEAPON_ROUNDSHOT].enabled = FALSE;
-		blink_weapon_hud( PS, &w[WEAPON_ROUNDSHOT],
-			ACHIEVEMENT_LOST_BLINK_DURATION );
-	}
-	else if (w[WEAPON_LASER_2].enabled) {
-		w[WEAPON_LASER_2].enabled = FALSE;
-		blink_weapon_hud( PS, &w[WEAPON_LASER_2],
-			ACHIEVEMENT_LOST_BLINK_DURATION );
-	}
-	else if (w[WEAPON_AUTOFIRE].enabled) {
-		w[WEAPON_AUTOFIRE].enabled = FALSE;
-		blink_weapon_hud( PS, &w[WEAPON_AUTOFIRE],
-			ACHIEVEMENT_LOST_BLINK_DURATION );
-	}
-#else
 	ship_t* s = &(GS->ship);
 
 	if (s->weapons[WEAPON_ROUNDSHOT].enabled) {
 		s->weapons[WEAPON_ROUNDSHOT].enabled = FALSE;
-		blink_weapon_hud( PS, &s->weapons[WEAPON_ROUNDSHOT],
-			ACHIEVEMENT_LOST_BLINK_DURATION );
+		blink_weapon_hud(
+			PS, &s->weapons[WEAPON_ROUNDSHOT],
+			ACHIEVEMENT_LOST_BLINK_DURATION
+		);
 	}
 	else if (s->weapons[WEAPON_LASER_2].enabled) {
 		s->weapons[WEAPON_LASER_2].enabled = FALSE;
-		blink_weapon_hud( PS, &s->weapons[WEAPON_LASER_2],
-			ACHIEVEMENT_LOST_BLINK_DURATION );
+		blink_weapon_hud(
+			PS, &s->weapons[WEAPON_LASER_2],
+			ACHIEVEMENT_LOST_BLINK_DURATION
+		);
 	}
 	else if (s->weapons[WEAPON_AUTOFIRE].enabled) {
 		s->weapons[WEAPON_AUTOFIRE].enabled = FALSE;
-		blink_weapon_hud( PS, &s->weapons[WEAPON_AUTOFIRE],
-			ACHIEVEMENT_LOST_BLINK_DURATION );
+		blink_weapon_hud(
+			PS, &s->weapons[WEAPON_AUTOFIRE],
+			ACHIEVEMENT_LOST_BLINK_DURATION
+		);
 	}
+
+#if PLAY_COMPUTER_VOICE
+	play_sound( GS->sounds.computer_weaponlost );
 #endif
 }
 
@@ -267,9 +257,17 @@ int calculate_total_score( program_state_t* PS, game_state_t* GS )
 void load_highscore( game_state_t* GS )
 {
 	FILE* fh;
+	char buffer[255];
 
 	if ( (fh = fopen(HIGHSCORE_FILENAME, "r")) ) {
-		fscanf( fh, "%d", &(GS->score.high_score) );
+
+		fscanf( fh, "%s", buffer );
+
+		if (strcmp(buffer, PROGRAM_VERSION) == 0) {
+			fscanf( fh, "%d", &(GS->score.high_score_level) );
+			fscanf( fh, "%d", &(GS->score.high_score) );
+		}
+
 		fclose( fh );
 	}
 }
@@ -283,9 +281,15 @@ void save_highscore( program_state_t* PS, game_state_t* GS )
 	if (total_score > GS->score.high_score) {
 
 		GS->score.high_score = total_score;
+		GS->score.high_score_level = GS->current_level;
 
 		if ( (fh = fopen(HIGHSCORE_FILENAME, "w")) ) {
-			fprintf( fh, "%d\n", GS->score.high_score );
+			fprintf(
+				fh,
+				PROGRAM_VERSION"\n%d\n%d\n",
+				GS->score.high_score_level,
+				GS->score.high_score
+			);
 			fclose( fh );
 		}
 	}
