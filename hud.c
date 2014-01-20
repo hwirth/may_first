@@ -197,6 +197,31 @@ void hud_draw_level_nr( program_state_t* PS, game_state_t* GS )
 		0x808080,
 		"WAVE"
 	);
+
+	if (GS->show_wave_until_us > PS->current_time_us) {
+
+		int w = PS->window_width;
+		int h = PS->window_height;
+
+		real_t fade
+			= (real_t)(GS->show_wave_until_us - PS->current_time_us)
+			/ NEXT_WAVE_NOTICE_DURATION
+		;
+
+		fade = sin( fade * 1.444 );
+
+		int color
+			= ( (int)(fade * (real_t)0x44) * 0x10000 )
+			+ ( (int)(fade * (real_t)0xAA) * 0x100 )
+			+ ( (int)(fade * (real_t)0x11) )
+		;
+
+		hud_printf(
+			PS,
+			w/2, 4*h/6, ALIGN_CENTER, color, "Wave %d",
+			GS->current_level
+		);
+	}
 }
 
 
@@ -571,7 +596,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		PS,
 		x,
 		y + (i--) * (PS->line_height),
-		ALIGN_CENTER, 0xFFFFFF,
+		ALIGN_CENTER, 0xAAAAAA,
 		"SCORE                               %7d",
 		score
 	);
@@ -582,7 +607,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		PS,
 		x,
 		y + (i--) * (PS->line_height),
-		ALIGN_CENTER, 0xFFFFFF,
+		ALIGN_CENTER, 0xAAAAAA,
 		"HIT RATIO     %7d%%  x%7d  = %7d",
 		si->hit_ratio,
 		score,
@@ -593,7 +618,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		PS,
 		x,
 		y + (i--) * (PS->line_height),
-		ALIGN_CENTER, 0xFFFFFF,
+		ALIGN_CENTER, 0xAAAAAA,
 		"SPEED BONUS   %7d%%  x%7d  = %7d",
 		si->speed,
 		score,
@@ -606,7 +631,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		PS,
 		x,
 		y + (i--) * (PS->line_height),
-		ALIGN_CENTER, 0xFFFFFF,
+		ALIGN_CENTER, 0xAAAAAA,
 		"BEST RESOURCE  %7d  x%7d  = %7d",
 		si->best_resource,
 		BONUS_FACTOR_BEST_RESOURCE,
@@ -617,7 +642,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		PS,
 		x,
 		y + (i--) * (PS->line_height),
-		ALIGN_CENTER, 0xFFFFFF,
+		ALIGN_CENTER, 0xAAAAAA,
 		"DISTANCE       %7d  x%7d  = %7d",
 		si->distance,
 		BONUS_FACTOR_DISTANCE,
@@ -642,7 +667,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		x,
 		y + (i--) * (PS->line_height),
 		ALIGN_CENTER, 0xAAAAAA,
-		"High Score: %d (Wave %d)",
+		( total_score > GS->score.high_score ? "High Score!" : "High Score: %d (Wave %d)" ),
 		GS->score.high_score,
 		GS->score.high_score_level
 	);

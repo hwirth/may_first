@@ -429,8 +429,18 @@ void advance_laser_beam(
 	enemy_t* e;
 
 	l->position.x += l->velocity.x * PS->tick_fraction_s;
-	l->position.y += l->velocity.y * PS->tick_fraction_s;
 	l->position.z += l->velocity.z * PS->tick_fraction_s;
+
+	if (l->owner < 0) {
+		l->position.y += l->velocity.y * PS->tick_fraction_s;
+	}
+	else {	// Enemy
+		l->position.y
+			+= (0.4 + (real_t)GS->current_level / 10.0)
+			* l->velocity.y
+			* PS->tick_fraction_s
+		;
+	}
 
 	// Beam leaving the game area?
 	if (	(l->position.y > l->decay_beyond_y)
@@ -739,12 +749,12 @@ void advance_simulation( program_state_t* PS, game_state_t* GS )
 		advance_black_hole( PS, GS );
 
 		if (GS->nr_active_enemies_total == 0) {
-			advance_to_next_level( GS );
+			advance_to_next_level( PS, GS );
 		}
 
 #if DISABLED_CODE
 		if (s->position.y / 100 / 30 > GS->current_level) {
-			advance_to_next_level( GS );
+			advance_to_next_level( PS, GS );
 			//... missing: keep existing formations
 		}
 #endif

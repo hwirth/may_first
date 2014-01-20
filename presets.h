@@ -139,6 +139,7 @@
 #define COLOR_BLINK_HI			0xFFFFFF
 #define COLOR_BLINK_LO			0x000000
 
+#define NEXT_WAVE_NOTICE_DURATION	(2*1000000)
 
 #define DUAL_FIRE_DISTANCE		2.5		// Starting position x-offset for dual LASER
 

@@ -35,30 +35,38 @@ related things.
 
 
 *******************************************************************************
-* 2. GAMEPLAY (alpha 0.1.7)
+* 2. GAMEPLAY (alpha 0.2.3)
 *******************************************************************************
 
 The player is confronted with an armada of alien tetraeder shaped space
-vessels. Dieing enemies drop "Resource" for the player to collect. Everything
+vessels. Killed enemies drop "Resource" for the player to collect. Everything
 is payed from this single resource, from weapon fire to absorbing hits.
+The first Resource bubble of a kind will unlock a weapon upgrade according to
+the tier (color) of the enemy:
 
-While it builds up slowly over time, the player will get the main portion of
-resource through killing enemies. Available weapons are:
+LASER Beam - Always available - Costs 1 unit of Resource per shot.
 
-- LASER Beam      Costs one unit of Resource per shot.
-- Double LASER    Costs four units of Resource.
-- Triple LASER    Press the keys for main and double fire at the same time.
-                  Costs five units of Resource.
-- Round Shot      Fires a range of beams in all directions. Costs a lot.
+Auto Fire - Dropped by BLUE enemies
+  Hold any weapon control to initiate a burst.
 
-RESOURCE
---------
+Double Shot - Dropped by GREEN enemies - Costs 4 units of Resource.
+
+Triple Shot - Costs 5 units of Resource
+  Press the keys for main and double fire at the same time.
+
+Round Shot - Dropped by RED enemies - Costs a lot.
+  Fires a range of beams in all directions.
+
 If enemies pass by the player's ship, they will re-appear a short while later
 on the "field" until they are destroyed or the game ends.
+
 Avoid the "black holes", they will drain your Resource quickly. If you get
 too near to the center, the game will end.
+
 If Resource is low (indicator blinks), it is a good idea to aim properly and
-go for the small enemies (blue or green) in order to regain Resource.
+go for the small enemies (blue or green) in order to regain Resource. Aim to
+keep your Resource "green".
+
 If the ship gets hit, Resource is halved until it is below 50.
 Taking a hit with Resource below 50 leads to death and the end of the game.
 
@@ -193,6 +201,7 @@ v0.2.3
 ? Black Holes suck in enemies and Lasers, distance markers
 ? Black Holes refract lasers
 \ Re-enable F11 (Toggle Fullscreen); Seems impossible - OpenGL?
+? Level Modes: Survive, KillAll (time-), Hurry (speed-), Aim! (HR bonus), ...
 
 *******************************************************************************
 BUGS:

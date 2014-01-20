@@ -31,8 +31,14 @@ stars_background.jpg
 	http://kidface.deviantart.com/art/Stars-392896212
 	(c) 2013 kidface
 
+computer_*.wav
+	Created on a Mac with the voice "Alex"
+
 neu4_run.ogg
 hit.wav
 digits.png
 	License: Copyleft
 	http://harald.ist.org/
+
+DejaVuSansMono.ttf
+	I still have to check, if and how I may include the font.

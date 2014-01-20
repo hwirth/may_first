@@ -316,7 +316,7 @@ PS->lowest_frame_time	= 99999999;
 	PS->next_second_us = PS->game_start_us + 1000000;
 	PS->game_time_us = 0;
 
-	prepare_first_level( GS );	// Create initial enemies
+	prepare_first_level( PS, GS );	// Create initial enemies
 
 	PS->run_mode = RM_RUNNING;
 }

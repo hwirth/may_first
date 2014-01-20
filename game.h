@@ -249,6 +249,7 @@ struct game_state_s {
 
 	score_info_t	score;
 	microtime_t	blink_highscore_until_us;
+	microtime_t	show_wave_until_us;	// Wave number at screen center
 
 	// Automatic recharging
 	microtime_t next_recharge_after_us;	// At least travel for a while

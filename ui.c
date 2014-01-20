@@ -107,7 +107,7 @@ void init_sound( program_state_t* PS, game_state_t* GS )
 	}
 #endif
 
-	PS->volume_fx = MIX_MAX_VOLUME / 2;
+	PS->volume_fx    = MIX_MAX_VOLUME / 3;
 	PS->volume_music = MIX_MAX_VOLUME / 2;
 
 #if (PLAY_SOUNDS || PLAY_MUSIC)

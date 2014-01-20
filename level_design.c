@@ -281,9 +281,11 @@ void create_units( game_state_t* GS )
 * LEVEL CONTROL
 ******************************************************************************/
 
-void advance_to_next_level( game_state_t* GS )
+void advance_to_next_level( program_state_t* PS, game_state_t* GS )
 {
 	int i, j, k;
+
+	formation_rank_t* r;
 
 	// Reset formations
 	for( i = 0 ; i < MAX_FORMATIONS ; i++ ) {
@@ -292,10 +294,12 @@ void advance_to_next_level( game_state_t* GS )
 
 		for( j = 0 ; j < MAX_FORMATION_RANKS ; j++ ) {
 
-			GS->formations[i].ranks[j].occupied_by = NULL;
+			r = &( GS->formations[i].ranks[j] );
+
+			r->occupied_by = NULL;
 
 			for( k = 0 ; k < NR_FILLFROM_RANKS ; k++ ) {
-				GS->formations[i].ranks[j].fillfrom_index[k] = -1;
+				r->fillfrom_index[k] = -1;
 			}
 		}
 	}
@@ -307,6 +311,11 @@ void advance_to_next_level( game_state_t* GS )
 	//...GS->best_resource	= 0;
 
 	++GS->current_level;
+
+	GS->show_wave_until_us
+		= PS->current_time_us
+		+ NEXT_WAVE_NOTICE_DURATION
+	;
 
 #if TEST_LEVELS
 	int L = GS->current_level;
@@ -324,7 +333,7 @@ void advance_to_next_level( game_state_t* GS )
 #endif
 }
 
-void prepare_first_level( game_state_t* GS )
+void prepare_first_level( program_state_t* PS, game_state_t* GS )
 {
 	GS->shots_fired		= 0;
 	GS->shots_missed	= 0;
@@ -349,7 +358,7 @@ void prepare_first_level( game_state_t* GS )
 	generate_black_hole( GS );
 
 	GS->current_level = 0;
-	advance_to_next_level( GS );	// Increases level, spawns enemies
+	advance_to_next_level( PS, GS );	// Increases level, spawns enemies
 }
 
 
