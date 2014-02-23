@@ -57,22 +57,21 @@ void draw_distance_marker(
 {
 	const int w = LABEL_QUAD_WIDTH;
 	const int h = LABEL_QUAD_HEIGHT;
-	int number;
 
 	GLfloat z, digit_x;
 	GLfloat quad_x = LABEL_OFFSET_X - LABEL_QUAD_WIDTH/2.0;
 
-	bool_t draw_zero;
+	int number = line_position_y / 100;
+	bool_t draw_zero = (number == 0);
 
-
-	number = line_position_y / 100;
-	draw_zero = (number == 0);
 	// Find out, how long the number is, preparing;
 	// quad_x as offset to the first (rightmost) digit
 	while (number > 9) {
 		quad_x += LABEL_QUAD_WIDTH/2.0;
 		number /= 10;
 	}
+
+	// We tainted  number  in the while loop above, so we recalculate it
 	number = line_position_y / 100;
 
 	glEnable( GL_BLEND );
@@ -98,6 +97,8 @@ void draw_distance_marker(
 // On some builds, when the vertices and mapping coordinates are NOT created,
 // a LASER fired by the player immediately hits the player's ship.
 // If the bug occurs, it happens on every shot fired.
+// For some reason, the bug is gone without updating neither of my Linux
+// machines, even for older versions of the game.
 	glTexCoord2f( digit_x,     1 );	glVertex3f( quad_x,   y-h/2, z );
 	glTexCoord2f( digit_x+0.1, 1 );	glVertex3f( quad_x+w, y-h/2, z );
 	glTexCoord2f( digit_x+0.1, 0 );	glVertex3f( quad_x+w, y+h/2, z );
@@ -721,6 +722,9 @@ void draw_scene_bonus_bubbles( program_state_t* PS, game_state_t* GS )
 	const real_t z = /*//...GRID_DELTA_Z - 0.01;*/ 0.0;
 	real_t time_angle;
 
+	int bubble_age_us, time_left_us;
+	real_t intensity;
+
 	bonus_bubble_t* b;
 
 	glLineWidth( 1.5 );
@@ -731,8 +735,12 @@ void draw_scene_bonus_bubbles( program_state_t* PS, game_state_t* GS )
 
 		if (b->active) {
 
-			if (PS->game_time_us - b->start_time_us
-				> BONUS_BUBBLE_LIFETIME_US)
+			bubble_age_us
+				= PS->game_time_us
+				- b->start_time_us
+			;
+
+			if (bubble_age_us > BONUS_BUBBLE_LIFETIME_US)
 			{
 				remove_bonus_bubble( GS, b );
 			}
@@ -744,6 +752,51 @@ void draw_scene_bonus_bubbles( program_state_t* PS, game_state_t* GS )
 				;
 
 				size = bubble_size( b );
+
+				time_left_us
+					= max( 1,
+						BONUS_BUBBLE_LIFETIME_US
+						- bubble_age_us
+					)
+				;
+
+				if (time_left_us < 333000) {
+					set_color(
+						1,1,1,
+						1.0,		// Intensity
+						depth_factor,
+						FALSE
+					);
+				}
+				else {
+					intensity = fmin( 1.0,
+						(
+							BONUS_BUBBLE_LIFETIME_US
+							* 0.3
+							+ (real_t)time_left_us
+						)
+						/ BONUS_BUBBLE_LIFETIME_US
+					);
+
+					set_color(
+						b->color.R,
+						b->color.G,
+						b->color.B,
+						intensity,
+						depth_factor,
+						FALSE
+					);
+				}
+
+				glPointSize( 5 * depth_factor );
+
+				glBegin( GL_POINTS );
+				glVertex3f(
+					b->position.x,
+					b->position.y,
+					z
+				);
+				glEnd();
 
 				time_angle
 					= (real_t)(
@@ -757,24 +810,6 @@ void draw_scene_bonus_bubbles( program_state_t* PS, game_state_t* GS )
 					/ size
 					* 360.0
 				;
-
-				glPointSize( 5 * depth_factor );
-				set_color(
-					b->color.R,
-					b->color.G,
-					b->color.B,
-					1.0,	// Intensity
-					depth_factor,
-					FALSE
-				);
-
-				glBegin( GL_POINTS );
-				glVertex3f(
-					b->position.x,
-					b->position.y,
-					z
-				);
-				glEnd();
 
 				glBegin( GL_LINES );
 				for( angle = 0 ; angle <  360 ; angle += 360/(12+2*size) ) {

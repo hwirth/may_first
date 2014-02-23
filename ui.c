@@ -5,6 +5,7 @@
 * This module encapsulates everything needed to work with the operating system
 * (desktop), like creating a window, handling input, etc.
 ******************************************************************************/
+#include <time.h>
 
 #include <SDL/SDL.h>
 
@@ -321,11 +322,69 @@ void test( program_state_t* PS, game_state_t* GS )	//...
 	}
 }
 
+SDL_Surface* flipVert( SDL_Surface* sfc )
+{
+	// taken from:
+	// http://content.gpwiki.org/index.php/OpenGL:Tutorials:Taking_a_Screenshot
+
+	SDL_Surface* result = SDL_CreateRGBSurface( sfc->flags, sfc->w, sfc->h,
+		sfc->format->BytesPerPixel * 8, sfc->format->Rmask, sfc->format->Gmask,
+		sfc->format->Bmask, sfc->format->Amask );
+	if (result == NULL) return NULL;
+
+	Uint8* pixels = (Uint8*) sfc->pixels;
+	Uint8* rpixels = (Uint8*) result->pixels;
+
+	Uint32 pitch = sfc->pitch;
+	Uint32 pxlength = pitch*sfc->h;
+
+	for(int line = 0; line < sfc->h; ++line) {
+		Uint32 pos = line * pitch;
+		memcpy( &rpixels[pos], &pixels[(pxlength-pos)-pitch], pitch );
+	}
+
+	return result;
+}
+
+void create_screenshot( program_state_t* PS, game_state_t* GS ) {
+	// taken from:
+	// http://content.gpwiki.org/index.php/OpenGL:Tutorials:Taking_a_Screenshot
+
+	SDL_Surface * surf = SDL_CreateRGBSurface( SDL_SWSURFACE, PS->window_width, PS->window_height, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0 );
+	if (surf == NULL) return;
+
+	glReadPixels( 0, 0, PS->window_width, PS->window_height, GL_RGB, GL_UNSIGNED_BYTE, surf->pixels );
+
+	SDL_Surface * flip = flipVert( surf );
+	if (flip == NULL) return;
+	SDL_FreeSurface( surf );
+
+	time_t rawtime;
+	struct tm *ltime;
+
+	time( &rawtime );
+	ltime = localtime( &rawtime );
+
+	char *screenshot_name;
+	asprintf( &screenshot_name, "screenshot_%4d_%02d_%02d-%02d.%02d.%02d.bmp",
+			ltime->tm_year + 1900,
+			ltime->tm_mon,
+			ltime->tm_mday,
+			ltime->tm_hour,
+			ltime->tm_min,
+			ltime->tm_sec);
+
+	SDL_SaveBMP( flip, screenshot_name );
+
+	free( screenshot_name );
+	SDL_FreeSurface( flip );
+}
 
 void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 {
 	switch (ksym) {
 
+	case SDLK_PRINT:	create_screenshot( PS, GS ); break;
 	case SDLK_a:						// fall through
 	case SDLK_LEFT:		start_move( PS, GS, LEFT );		break;
 	case SDLK_d:						// fall through

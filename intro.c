@@ -72,13 +72,21 @@ void draw_grid( program_state_t* PS )
 	glRotatef( CAMERA_ANGLE, 1,0,0 );
 	glRotatef( camera_rotation, 0,0,1 );
 
+	glPointSize( 1.0 );
+	glColor3f( 1.0, 1.0, 1.0 );
+
+	int A, R;
 	GLfloat start_radius = (T % 100000) / -100000.0 + 0.01;
 
 	glBegin( GL_POINTS );
-	glPointSize( 1 );
-	glColor3f( 1.0, 1.0, 1.0 );
-	for( a = 0.0 ; a < 360.0*DEG_TO_RAD ; a += 5.0*DEG_TO_RAD ) {
-		for( r = start_radius ; r < RADIUS ; r += RADIUS/100.0) {
+	for( A = 0 ; A < 360 ; A += 5 ) {
+
+		a = A * DEG_TO_RAD;
+
+		for( R = 0 ; R < 100 ; R++ ) {
+
+			r = start_radius + R * 100.0/RADIUS;
+
 			x = cos(a) * r;
 			y = sin(a) * r;
 			z = -RADIUS / sqrt(r + RADIUS_OFFSET);

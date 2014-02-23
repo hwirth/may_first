@@ -351,7 +351,7 @@ void prepare_first_level( program_state_t* PS, game_state_t* GS )
 	GS->next_recharge_after_us = RECHARGE_TIME;
 
 	GS->add_enemy_beyond_y = calculate_enemy_beyond_y( GS );
-	GS->nr_warp_enemies = 1;	// Next time, the player warps around,
+	GS->nr_warp_enemies = MIN_WARP_ENEMIES;	// Next time, the player warps around,
 					// ..spawn one new enemy.
 
 	GS->black_hole.random_seed = 0;
@@ -387,22 +387,21 @@ void player_warped_around( game_state_t* GS )
 
 	if (f != NULL) {
 		int tier = TIER_1;
-		int fsize = 8;		//... calculate from amount
+		int fsize = 1 + sqrt( GS->nr_warp_enemies );
+		//... check, if in range
 
 		f->nr_ranks = create_formation(
 			GS, f, tier, fsize, 1, 1
 		);
 		create_formation_enemies( GS, f, tier, GS->nr_warp_enemies );
 		//... Check if formation is removed when last enemy is killed
-		//... Not critical, because new enemies will only be created,
-		//... when there are free slots.
 	}
 
 	GS->add_enemy_beyond_y = calculate_enemy_beyond_y( GS );
 
 	// Increase number of new enemies in case, the player
 	// does not kill within the next "warp"
-	GS->nr_warp_enemies *= 2;
+	GS->nr_warp_enemies += 2;
 #endif
 }
 

@@ -21,6 +21,7 @@ The model for this game, Juno First, is a real master piece and a classic.
 I immediately fell in love with this game for reasons like how certain effects
 are achieved with almost no effort, or the speed rush one experiences when
 getting into a firing frenzy, which somehow works extremly well in Juno First.
+Gameplay of Juno First: http://www.youtube.com/watch?v=vWB-GiSElV4
 
 Apropos frenzy, May First got its basic shape in two days, when I had an
 accute programming attack. The following weeks of work mainly consisted of
@@ -78,7 +79,7 @@ enemies. Better level design is in preparation.
 
 
 *******************************************************************************
-* 3. BUILDING FROM SOURCE (alpha 0.1.7)
+* 3. BUILDING FROM SOURCE (alpha 0.2.4)
 *******************************************************************************
 
 You may need to install a few packages before you can compile the program.
@@ -89,16 +90,24 @@ Under Debian 7.1 I had to issue:
     libsdl-mixer1.2-dev  \
     libsdl-gfx1.2-dev
 
-    #libglew-dev
-
 Under Fedora 20 I used:
   $ su -c 'yum install  \
     SDL_image-devel     \
     SDL_ttf-devel       \
     SDL_mixer-devel     \
-    SDL_gfx-devel       \
-    '
-    #libGLEW
+    SDL_gfx-devel
+
+Mac:
+  $ brew install \
+    sdl_gfx      \
+    sdl_image    \
+    sdl_mixer    \
+   sdl_rtf       \
+    sdl_sound    \
+    sdl_ttf
+
+  Disable DEBUG (main.h) and PLAY_MUSIC (ui.h). What is  sdl_rtf ?
+
 
 Compile the program with:
 
@@ -192,8 +201,7 @@ v0.2.3
 ? Save-points
 ? Homing device, can also be fired upon
 ? Momentum, ship slowly rotating into new attitude
-? Explosions trigger further explosions
-? Hyperjump
+? Explosions may trigger further explosions, if ships nearby
 ? Particle effect for ship rocket
 ? Easter Egg
 ? Ricochets
@@ -202,6 +210,7 @@ v0.2.3
 ? Black Holes refract lasers
 \ Re-enable F11 (Toggle Fullscreen); Seems impossible - OpenGL?
 ? Level Modes: Survive, KillAll (time-), Hurry (speed-), Aim! (HR bonus), ...
+? Shop every 200 distance
 
 *******************************************************************************
 BUGS:
@@ -212,10 +221,12 @@ BUGS:
 ? Sometimes; scene.c:draw_distance_marker() When texture coordinates are not
      applied, a shot fired by the player immediately hits the player's ship
      (100% reproducable, if the bug occurs at all)
+     alpha0.2.3: Bug suddenly disappeared, even in old versions.
+     Weird thing: I certainly did not update anything on neither of both my
+     computers.
 *******************************************************************************
 
 // TODO v1.0 //////////////////////////////////////////////////////////////////
-! Shop every 200 distance
 ! Credits in intro screen
 ! Recode sound track (Many systems won't have OGG support by default)
 ! Licensed media files only
@@ -264,10 +275,11 @@ BUGS:
 - New weapon upgrade: Use primary and double laser at the same time (tripple)
 - Bosses: T1 uses auto, T2 double, T3 round, T4 ?
 - Upgrades as objects (?type in bonus_bubble_t, double circle, ...)
-- Announce NEW HISCORE
+- Announce NEW HISCORE, combine with "WAVE" insert
 - Round-Shot: Deny-sound played multiple times?
 - Bonus x2, x3, ...
 - More models for enemies (Jelly Fish, Tetraeder-Dots)
+- Beams, etc: owner --> creator
 
 Look for comments like //... in all files: $ grep -n '//\.\.\.' *.{c,h}
 Kill a.out: # kill -9 $(ps -a | grep a.out | awk '{ print $1 }')

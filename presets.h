@@ -197,6 +197,7 @@
 #define ENEMY_MULTIPLY_DIVISOR		10		// larger --> more rarely additional enemies will spawn
 #define ENEMY_BASE_SHOOT_INTERVAL_US	(1000000*3)	//*3 How often a blue enemy fires
 #define ENEMY_TIER_SHOOT_FACTOR		9		// How much shooting interval increases with enemy's level
+#define MIN_WARP_ENEMIES		4		// Player warps around without killing, additional enemies appear
 #define MOTHERSHIP_SHOOT_FACTOR		19.0		// How much shooting interval increases with enemy's level
 #define MOTHERSHIP_AGRESSIVENESS	9
 #define MOTHERSHIP_PRE_AIM_OFFSET	17.0		// Effective: * SPEED_Y

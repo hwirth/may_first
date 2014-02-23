@@ -428,19 +428,34 @@ void advance_laser_beam(
 	ship_t* s = &(GS->ship);
 	enemy_t* e;
 
-	l->position.x += l->velocity.x * PS->tick_fraction_s;
-	l->position.z += l->velocity.z * PS->tick_fraction_s;
+#if TIER2_HOMING
+	vector_t v;
 
-	if (l->owner < 0) {
-		l->position.y += l->velocity.y * PS->tick_fraction_s;
+	if (GS->enemies[ l->owner ].tier == TIER_2) {	// Homing
+		v = unity_vector( subtract_vector(s->position, l->position) );
+		v.x *= 1.0;
+		v.y *= 1.0;
+		v.z = 0;
+		l->position = add_vector( l->position, v );
 	}
-	else {	// Enemy
-		l->position.y
-			+= (0.4 + (real_t)GS->current_level / 10.0)
-			* l->velocity.y
-			* PS->tick_fraction_s
-		;
+	else {	// Normal LASER beam
+#endif
+		l->position.x += l->velocity.x * PS->tick_fraction_s;
+		l->position.z += l->velocity.z * PS->tick_fraction_s;
+
+		if (l->owner < 0) {
+			l->position.y += l->velocity.y * PS->tick_fraction_s;
+		}
+		else {	// Enemy
+			l->position.y
+				+= (0.4 + (real_t)GS->current_level / 10.0)
+				* l->velocity.y
+				* PS->tick_fraction_s
+			;
+		}
+#if TIER2_HOMING
 	}
+#endif
 
 	// Beam leaving the game area?
 	if (	(l->position.y > l->decay_beyond_y)

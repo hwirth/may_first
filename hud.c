@@ -978,6 +978,16 @@ void draw_debug( program_state_t* PS, game_state_t* GS )
 	);
 #endif
 
+	hud_printf(
+		PS,
+		PS->line_height,
+		PS->line_height*line_count++,
+		ALIGN_LEFT | ALIGN_MIDDLE,
+		COLOR_TEXT_LO,
+		"%s %s",
+		PROGRAM_NAME,
+		PROGRAM_VERSION
+	);
 #endif
 }
 

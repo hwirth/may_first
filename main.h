@@ -1,6 +1,6 @@
 //main.h
 #define PROGRAM_NAME	"MAY FIRST"
-#define PROGRAM_VERSION	"alpha0.2.3"
+#define PROGRAM_VERSION	"alpha0.2.4"
 /******************************************************************************
 * MAY FIRST - A game inspired by http://en.wikipedia.org/wiki/Juno_First
 *******************************************************************************

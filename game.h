@@ -39,6 +39,7 @@ typedef struct formation_s	formation_t;
 typedef struct enemy_s		enemy_t;
 
 typedef struct laser_beam_s	laser_beam_t;		// Various objects
+typedef struct homing_torpedo_s	homing_torpedo_t;
 typedef struct explosion_s	explosion_t;
 typedef struct black_hole_s	black_hole_t;
 typedef struct bonus_bubble_s	bonus_bubble_t;
@@ -142,6 +143,13 @@ struct laser_beam_s {
 	int owner;		// Less than zero: Player weapon
 	real_t decay_beyond_y;	// Built-in self-destruct ("firing range")
 	real_t speed_bonus;	// Fired at slow speed reduces Resource gain
+};
+
+struct homing_torpedo_s {
+	bool_t active;
+
+	vector_t position;
+	real_t speed;
 };
 
 struct explosion_s {

@@ -233,7 +233,7 @@ void enemy_takes_hit(
 
 		// Reset ENEMY BEYOND counter
 		GS->add_enemy_beyond_y = calculate_enemy_beyond_y( GS );
-		GS->nr_warp_enemies = 1;	// Reset spawn amount
+		GS->nr_warp_enemies = MIN_WARP_ENEMIES;	// Reset spawn amount
 
 		play_sound( GS->sounds.hit );
 	}
