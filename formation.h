@@ -16,7 +16,8 @@ int create_formation(
 	int top_tier,
 	int formation_width,
 	int formation_index,
-	int nr_formations
+	int nr_formations,
+	real_t offset_y
 );
 
 void create_formation_enemies(

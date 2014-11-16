@@ -219,6 +219,7 @@ struct score_info_s {
 	int distance;		// Total score values calculated in..
 	int speed;		// .. calulate_total_score()
 	int best_resource;
+	int nr_killed_enemies;
 	int hit_ratio;
 };
 
@@ -251,6 +252,7 @@ struct game_state_s {
 	int shots_fired;	// How many beams the player started so far
 	int shots_en_route;	// How many of those beams are still active
 	int shots_missed;	// Beams decayed before they hit anything
+	int enemies_killed;	// For score calculation
 
 	int current_resource;	// Current Resource amount
 	int best_resource;	// Highest Resource recorded in this round

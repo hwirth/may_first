@@ -5,7 +5,7 @@
 * Rendering text as a 2D overlay over an OpenGL scene, used for drawing a
 * head-up display and debug info.
 *
-* snprintf
+* vsnprintf
 ******************************************************************************/
 
 #include <stdarg.h>
@@ -516,6 +516,7 @@ void hud_current_enemies( program_state_t* PS, game_state_t* GS )
 	glDisable( GL_BLEND );
 }
 
+
 // WEAPON STATE ///////////////////////////////////////////////////////////////
 
 /* get_weapon_color()
@@ -573,6 +574,7 @@ void hud_weapon_state(
 	);
 }
 
+
 /* hud_score_summary()
  * Display a detailed explanation how score was calculated.
  * Details need to be manually adjusted the algorithm in
@@ -588,6 +590,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 
 	int score         = GS->score.current;
 	int total_score   = calculate_total_score( PS, GS );
+	//...int s_elapsed = PS->game_time_us / 1000000.0;
 
 	score_info_t* si = &(GS->score);
 
@@ -600,7 +603,31 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		"SCORE                               %7d",
 		score
 	);
+#ifdef DISABLED_CODE
+	hud_printf(
+		PS,
+		x,
+		y + (i--) * (PS->line_height),
+		ALIGN_CENTER, 0xAAAAAA,
+		"DISTANCE       %7d  x%7d  = %7d",
+		si->distance,
+		BONUS_FACTOR_DISTANCE,
+		BONUS_FACTOR_DISTANCE * si->distance
+	);
 
+	hud_printf(
+		PS,
+		x,
+		y + (i--) * (PS->line_height),
+		ALIGN_CENTER, 0xAAAAAA,
+		"FRENZY    %5d /%5d  * %6d  = %7d",
+		GS->enemies_killed,
+		si->distance,
+		BONUS_FACTOR_ENEMIES,
+		BONUS_FACTOR_ENEMIES * GS->enemies_killed /
+			( (si->distance == 0) ? 1 : si->distance )
+	);
+#endif
 	--i;	// Omit one line
 
 	hud_printf(
@@ -625,8 +652,6 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		score * si->speed/100
 	);
 
-	--i;	// Omit one line
-
 	hud_printf(
 		PS,
 		x,
@@ -638,18 +663,8 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		BONUS_FACTOR_BEST_RESOURCE * si->best_resource
 	);
 
-	hud_printf(
-		PS,
-		x,
-		y + (i--) * (PS->line_height),
-		ALIGN_CENTER, 0xAAAAAA,
-		"DISTANCE       %7d  x%7d  = %7d",
-		si->distance,
-		BONUS_FACTOR_DISTANCE,
-		BONUS_FACTOR_DISTANCE * si->distance
-	);
-
 	--i;	// Omit one line
+
 
 	hud_printf(
 		PS,
@@ -660,7 +675,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		total_score
 	);
 
-	--i;
+	--i;	// Omit one line
 
 	hud_printf(
 		PS,

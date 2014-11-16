@@ -1,4 +1,5 @@
-CC := gcc
+#CC := gcc
+CC := clang
 TARGET := a.out
 SRCS := \
 	gl_helpers.c    \
@@ -17,8 +18,9 @@ SRCS := \
 
 OBJS := ${SRCS:.c=.o}
 DEPS := ${SRCS:.c=.dep}
-CFLAGS := -std=c99 -pedantic -Wall `sdl-config --cflags`
-DEBUG := -g3 -O0
+CFLAGS := -Werror -Wall -std=gnu99 -pedantic-errors -Wall `sdl-config --cflags` -fsanitize=local-bounds
+#DEBUG := -g3 -O0
+DEBUG := -ggdb3 -O0
 LDFLAGS :=
 LIBS := -lSDL -lGL -lGLU -lSDL_ttf -lm -DGL_GLEXT_PROTOTYPES  \
         `sdl-config --libs`            \

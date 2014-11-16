@@ -306,7 +306,9 @@ void draw_scene_ship(
 		glRotatef( fabs(s->velocity.x)/10,  1,0,0 );
 #endif
 
-		glRotatef(       s->velocity.x*10,  0,1,0 );	// Fwd axis
+		//... Animate roll per timer
+
+		glRotatef(       s->velocity.x*10,  0,1,0 );	// Roll (fdw axis)
 
 #if FIRE_DIAGONALLY
 		glRotatef(       s->velocity.x*5,   0,0,-1 );
@@ -1018,7 +1020,7 @@ void draw_game_frame( program_state_t* PS, game_state_t* GS )
 	glDepthFunc( GL_LESS );
 
 	glEnable( GL_BLEND );			// Enabling blending for..
-	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 	glEnable( GL_POINT_SMOOTH );		// ..anti-aliasing.
 	glEnable( GL_LINE_SMOOTH );
 	//glEnable( GL_POLYGON_SMOOTH );	//... looks like polygon antialiasing isn't that simple

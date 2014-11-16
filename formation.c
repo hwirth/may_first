@@ -280,7 +280,8 @@ int create_formation(
 	int top_tier,
 	int formation_width,
 	int formation_index,
-	int nr_formations
+	int nr_formations,
+	real_t offset_y
 	)
 {
 	formation_t* f = formation;
@@ -305,6 +306,7 @@ int create_formation(
 		* (real_t) formation_index
 		/ (real_t) nr_formations
 		//...* level_length(GS)
+		+ FIELD_HEIGHT * offset_y
 	;
 
 #if FREEZE_ENEMIES

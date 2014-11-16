@@ -384,24 +384,30 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 {
 	switch (ksym) {
 
-	case SDLK_PRINT:	create_screenshot( PS, GS ); break;
+	case SDLK_PRINT:	create_screenshot( PS, GS );		break;
 	case SDLK_a:						// fall through
+	case SDLK_j:						// fall through
 	case SDLK_LEFT:		start_move( PS, GS, LEFT );		break;
 	case SDLK_d:						// fall through
+	case SDLK_l:						// fall through
 	case SDLK_RIGHT:	start_move( PS, GS, RIGHT );		break;
 	case SDLK_w:						// fall through
+	case SDLK_i:						// fall through
 	case SDLK_UP:		start_move( PS, GS, FORWARD );		break;
 	case SDLK_s:						// fall through
+	case SDLK_k:						// fall through
 	case SDLK_DOWN:		start_move( PS, GS, BACK );		break;
 #if DEBUG
-	case SDLK_k:		remove_all_objects( GS );		break;
+	case SDLK_x:		remove_all_objects( GS );		break;
 #endif
 	case SDLK_m:		toggle_music();				break;
 	case SDLK_r:		reset_game( PS, GS );			break;
 	case SDLK_t:		test( PS, GS );				break;
 	case SDLK_PLUS:		volume_up  ( PS, VOLUME_ALL );		break;
 	case SDLK_MINUS:	volume_down( PS, VOLUME_ALL );		break;
+	case SDLK_INSERT:					// fall through
 	case SDLK_KP_PLUS:	volume_up  ( PS, VOLUME_FX );		break;
+	case SDLK_DELETE:					// fall through
 	case SDLK_KP_MINUS:	volume_down( PS, VOLUME_FX );		break;
 	case SDLK_KP_MULTIPLY:	volume_up  ( PS, VOLUME_MUSIC );	break;
 	case SDLK_KP_DIVIDE:	volume_down( PS, VOLUME_MUSIC );	break;
@@ -417,6 +423,9 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 	case SDLK_LSHIFT:					// fall through
 	case SDLK_LSUPER:
 		if (PS->run_mode == RM_RUNNING) {
+
+
+
 			start_fire( PS, GS, WEAPON_LASER_2, FM_SINGLE );
 		}
 		break;
@@ -426,8 +435,8 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 			start_round_shot( PS, GS, FM_SINGLE );
 		}
 		break;
-	case SDLK_RETURN:
-	//case SDLK_SPACE:
+	case SDLK_RETURN:					// fall through
+	case SDLK_SPACE:
 		if (PS->run_mode & (RM_INTRO | RM_MAIN_MENU | RM_AFTER_LIFE)) {
 			reset_game( PS, GS );
 		}
@@ -449,22 +458,30 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 	case SDLK_F11:		toggle_full_screen( PS );		break;
 	case SDLK_F12:		error_quit("User abort [F12]");		break;
 
-	}
-}
+	} // case
+
+} // handle_keydown
+
 
 void handle_keyup( program_state_t* PS, game_state_t* GS, int ksym )
 {
 	switch (ksym) {
 		case SDLK_a:					// fall through
+		case SDLK_j:					// fall through
 		case SDLK_LEFT:		stop_move( PS, GS, LEFT );	break;
 		case SDLK_d:					// fall through
+		case SDLK_l:					// fall through
 		case SDLK_RIGHT:	stop_move( PS, GS, RIGHT );	break;
 		case SDLK_w:					// fall through
+		case SDLK_i:					// fall through
 		case SDLK_UP:		stop_move( PS, GS, FORWARD );	break;
 		case SDLK_s:					// fall through
+		case SDLK_k:					// fall through
 		case SDLK_DOWN:		stop_move( PS, GS, BACK );	break;
 	}
-}
+
+} // handle_keyup
+
 
 void handle_mouse( program_state_t* PS )
 {

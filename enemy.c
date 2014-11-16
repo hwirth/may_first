@@ -219,10 +219,11 @@ void enemy_takes_hit(
 #if CHEAT_MODE
 				* CHEAT_RESOURCE_FACTOR
 #endif
-
 		);
 
 		remove_enemy( GS, e );
+
+		GS->enemies_killed += 1;
 
 		// Replace the killed enemy
 		//... -->level_design.c

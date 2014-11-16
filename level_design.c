@@ -118,7 +118,7 @@ n = level;
 	for( i = 0 ; i < n ; i++ ) {
 		if (fi < MAX_FORMATIONS) {
 			f = &(GS->formations[fi]);
-			f->nr_ranks = create_formation( GS, f, TIER_1, s1, fi, fi_max );
+			f->nr_ranks = create_formation( GS, f, TIER_1, s1, fi, fi_max, 0 );
 			create_formation_enemies( GS, f, TIER_1, a1 );
 			++fi;
 		}
@@ -126,7 +126,7 @@ n = level;
 	for( i = 0 ; i < n ; i++ ) {
 		if (fi < MAX_FORMATIONS) {
 			f = &(GS->formations[fi]);
-			f->nr_ranks = create_formation( GS, f, TIER_2, s2, fi, fi_max );
+			f->nr_ranks = create_formation( GS, f, TIER_2, s2, fi, fi_max, 0 );
 			create_formation_enemies( GS, f, TIER_2, a2 );
 			++fi;
 		}
@@ -134,7 +134,7 @@ n = level;
 	for( i = 0 ; i < n ; i++ ) {
 		if (fi < MAX_FORMATIONS) {
 			f = &(GS->formations[fi]);
-			f->nr_ranks = create_formation( GS, f, TIER_3, s3, fi, fi_max );
+			f->nr_ranks = create_formation( GS, f, TIER_3, s3, fi, fi_max, 0 );
 			create_formation_enemies( GS, f, TIER_3, a3 );
 			++fi;
 		}
@@ -142,7 +142,7 @@ n = level;
 	for( i = 0 ; i < n ; i++ ) {
 		if (fi < MAX_FORMATIONS) {
 			f = &(GS->formations[fi]);
-			f->nr_ranks = create_formation( GS, f, TIER_4, s1, fi, fi_max );
+			f->nr_ranks = create_formation( GS, f, TIER_4, s1, fi, fi_max, 0 );
 			create_formation_enemies( GS, f, TIER_4, a4 );
 			++fi;
 		}
@@ -201,6 +201,9 @@ void create_wave2(
 	int fsize;
 	int fi = *formation_index;
 	formation_t* f;
+	real_t offset_y;
+
+	offset_y = (GS->current_level > 1) ? NEXT_WAVE_PAUSE_OFFSET : 0 ;
 
 	if (amount < 1) return;
 
@@ -208,7 +211,7 @@ void create_wave2(
 		while (amount > 2*fsize*fsize) {
 			f = &(GS->formations[fi]);
 			f->nr_ranks = create_formation(
-				GS, f, tier, fsize, fi, nr_units
+				GS, f, tier, fsize, fi, nr_units, offset_y
 			);
 			create_formation_enemies( GS, f, tier, fsize*fsize );
 
@@ -221,7 +224,7 @@ void create_wave2(
 	for( fsize = 1 ; amount > 0 ; amount-- ) {
 		f = &(GS->formations[fi]);
 		f->nr_ranks = create_formation(
-			GS, f, tier, fsize, fi, nr_units
+			GS, f, tier, fsize, fi, nr_units, offset_y
 		);
 		create_formation_enemies( GS, f, tier, fsize*fsize );
 
@@ -335,14 +338,15 @@ void advance_to_next_level( program_state_t* PS, game_state_t* GS )
 
 void prepare_first_level( program_state_t* PS, game_state_t* GS )
 {
-	GS->shots_fired		= 0;
-	GS->shots_missed	= 0;
-	GS->shots_en_route	= 0;
-	GS->best_resource	= 0;
+	GS->shots_fired    = 0;
+	GS->shots_missed   = 0;
+	GS->shots_en_route = 0;
+	GS->best_resource  = 0;
+	GS->enemies_killed = 0;
 
 
-	GS->current_resource	= INITIAL_RESOURCE * CHEAT_RESOURCE_FACTOR;
-	GS->score.current	= 0;
+	GS->current_resource = INITIAL_RESOURCE * CHEAT_RESOURCE_FACTOR;
+	GS->score.current    = 0;
 
 	GS->ship.position = vector( 0,0,0 );
 	GS->ship.weapons[WEAPON_LASER_1].enabled = TRUE;
@@ -389,9 +393,9 @@ void player_warped_around( game_state_t* GS )
 		int tier = TIER_1;
 		int fsize = 1 + sqrt( GS->nr_warp_enemies );
 		//... check, if in range
-
+		int offset_y = 0;
 		f->nr_ranks = create_formation(
-			GS, f, tier, fsize, 1, 1
+			GS, f, tier, fsize, 1, 1, offset_y
 		);
 		create_formation_enemies( GS, f, tier, GS->nr_warp_enemies );
 		//... Check if formation is removed when last enemy is killed

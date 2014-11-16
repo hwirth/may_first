@@ -139,8 +139,6 @@
 #define COLOR_BLINK_HI			0xFFFFFF
 #define COLOR_BLINK_LO			0x000000
 
-#define NEXT_WAVE_NOTICE_DURATION	(2*1000000)
-
 #define DUAL_FIRE_DISTANCE		2.5		// Starting position x-offset for dual LASER
 
 #define MAX_LASER_BEAMS			1000		// Max. amount of simultaneously active (visible) laser beams
@@ -164,7 +162,7 @@
 
 #define FIRING_COST_LASER_1		1
 #define FIRING_COST_LASER_2		4
-#define FIRING_COST_ROUND_SHOT		100
+#define FIRING_COST_ROUND_SHOT		20		//100
 
 #define AUTO_FIRE_MALUS			2		// Additional firing cost
 #define AUTO_FIRE_DELAY			222000		// Time to wait before auto fire starts
@@ -175,6 +173,9 @@
 
 #define OWNER_PLAYER			(-1)		// Keep track of who fired which laser beam
 #define OWNER_PLAYER_NO_RESPAWN		(-2)		// Beams that should not trigger enemy respawn
+
+#define NEXT_WAVE_NOTICE_DURATION	(4*1000000)
+#define NEXT_WAVE_PAUSE_OFFSET		0.1		// Factor of FIELD_HEIGHT of moving the first formations additionally further behind
 
 #define NR_TIERS			4		// Kinds of enemies
 #define TIER_1				0
@@ -223,12 +224,13 @@
 #define BONUS_FACTOR_SPEED		25
 #define BONUS_FACTOR_BEST_RESOURCE	5
 #define BONUS_FACTOR_HIT_RATIO		25
+#define BONUS_FACTOR_ENEMIES		1000
 
 #if CHEAT_MODE
-#define CHEAT_RESOURCE_FACTOR	20.0			// Increased Resource gain
+#define CHEAT_RESOURCE_FACTOR		20.0		// Increased Resource gain
 #define NEW_ENEMY_DISTANCE_DIVISOR	1.0		//1 Mothership (yellow) may appear at distance 4
 #else
-#define CHEAT_RESOURCE_FACTOR	1.0			// Normal Resource gain
+#define CHEAT_RESOURCE_FACTOR		1.0		// Normal Resource gain
 #define NEW_ENEMY_DISTANCE_DIVISOR	1000		//...? Describes when the next class of enemy may spawn
 #endif
 

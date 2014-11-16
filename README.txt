@@ -280,6 +280,10 @@ BUGS:
 - Bonus x2, x3, ...
 - More models for enemies (Jelly Fish, Tetraeder-Dots)
 - Beams, etc: owner --> creator
+- Cooldown time for round shot, but cheap (10-20)
+- AI Modes (Straigt line in modes)
+- Left/Right roll smooth transition between the current 3 ground states
+- Score: Enemy Speed = Nr. killed / distance
 
 Look for comments like //... in all files: $ grep -n '//\.\.\.' *.{c,h}
 Kill a.out: # kill -9 $(ps -a | grep a.out | awk '{ print $1 }')
