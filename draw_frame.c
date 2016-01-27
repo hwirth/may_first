@@ -14,8 +14,8 @@
 * If debugging is enabled, draw_debug() (hud.c) will show various statistics.
 ******************************************************************************/
 
-#include <malloc.h>	// Used for statistics...
-//#include <locale.h>	// ...in Draw_HUD()
+#include <malloc.h>     // Used for statistics...
+//#include <locale.h>   // ...in Draw_HUD()
 #include <math.h>
 
 #include <SDL/SDL.h>
@@ -72,15 +72,15 @@ void draw_exit_frame( program_state_t* PS, game_state_t* GS )
 
 	glViewport( 0, 0, w, h );
 
-	glClearColor( 0.0f, 0.0f, 0.1f, 1.0f );	// Background black and opaque
+	glClearColor( 0.0f, 0.0f, 0.1f, 1.0f ); // Background black and opaque
 	glClearDepth( 1.0f );                   // Background depth to farthest
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-	glMatrixMode( GL_PROJECTION );		// Setup 2D mode
+	glMatrixMode( GL_PROJECTION );          // Setup 2D mode
 	glLoadIdentity();
 	gluOrtho2D(
-		0, w,	// Let coordinates match..
-		0, h	// ..screen resolution
+		0, w,                           // Let coordinates match..
+		0, h                            // ..screen resolution
 	);
 	glMatrixMode( GL_MODELVIEW );
 	glDisable( GL_DEPTH_TEST );
@@ -105,12 +105,12 @@ void draw_exit_frame( program_state_t* PS, game_state_t* GS )
 void draw_frame( program_state_t* PS, game_state_t* GS )
 {
 	switch (PS->run_mode) {
-		case RM_INTRO:		draw_intro_frame( PS );		break;
-		case RM_MAIN_MENU:				// fall through
-		case RM_RUNNING:				// fall through
-		case RM_PAUSE:					// fall through
-		case RM_AFTER_LIFE:	draw_game_frame( PS, GS );	break;
-		case RM_EXIT:		draw_exit_frame( PS, GS );	break;
+		case RM_INTRO:       draw_intro_frame( PS );     break;
+		case RM_MAIN_MENU:   // fall through
+		case RM_RUNNING:     // fall through
+		case RM_PAUSE:       // fall through
+		case RM_AFTER_LIFE:  draw_game_frame( PS, GS );  break;
+		case RM_EXIT:        draw_exit_frame( PS, GS );  break;
 	}
 
 	// Show debug info
@@ -118,7 +118,7 @@ void draw_frame( program_state_t* PS, game_state_t* GS )
 		draw_debug( PS, GS );
 	}
 
-	SDL_GL_SwapBuffers();		// Wait for VSYNC and update screen
+	SDL_GL_SwapBuffers();        // Wait for VSYNC and update screen
 
 	//...log_opengl_errors();
 }

@@ -17,7 +17,7 @@
 
 // TYPEDEFS ///////////////////////////////////////////////////////////////////
 
-typedef enum direction_e {		// player.c  <--  ui.c
+typedef enum direction_e {           // player.c  <--  ui.c
 	LEFT, RIGHT, FORWARD, BACK
 } direction_t;
 

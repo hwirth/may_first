@@ -22,8 +22,8 @@ void generate_black_hole( game_state_t* GS )
 	black_hole_t* bh = &(GS->black_hole);
 
 	bh->position.x
-		= (	rand_int( &(bh->random_seed) )
-			% (int)FIELD_WIDTH
+		= ( rand_int( &(bh->random_seed) )
+		    % (int)FIELD_WIDTH
 		)
 		- FIELD_WIDTH / 2
 	;
@@ -37,12 +37,12 @@ void generate_black_hole( game_state_t* GS )
 #if BLACK_HOLES_SUCK
 void blackhole_attracts_ship( game_state_t* GS )
 {
-	real_t dx;	// x portion of distance to the Black Hole
-	real_t dx1;	// dx reduced to the x portion of the unity vector
-	real_t a;	// Angle of camera rotation, so that we look into
-			// the Black Hole
-	real_t df;	// Distance Factor; 0..1 when near the BH,
-			// 1, when outside of the BH's radius
+	real_t dx;    // x portion of distance to the Black Hole
+	real_t dx1;   // dx reduced to the x portion of the unity vector
+	real_t a;     // Angle of camera rotation, so that we look into
+	              // the Black Hole
+	real_t df;    // Distance Factor; 0..1 when near the BH,
+	              // 1, when outside of the BH's radius
 	real_t distance = GS->ship.distance_to_black_hole;
 
 	df = fmin(1.0, distance / BLACK_HOLE_RADIUS_SHIP);
@@ -71,8 +71,8 @@ void create_wave( game_state_t* GS, int level, int* formation_index )
 	int fi = *formation_index;
 
 	int i, n;
-	int a1, a2, a3, a4;	// Amount per tier
-	int s1, s2, s3, s4;	// Width (formation size) per tier
+	int a1, a2, a3, a4;     // Amount per tier
+	int s1, s2, s3, s4;     // Width (formation size) per tier
 
 	formation_t* f;
 
@@ -102,8 +102,8 @@ void create_wave( game_state_t* GS, int level, int* formation_index )
 	s3 = a3 = min( 4, s3 );  a3 *= a3;
 	s4 = a4 = min( 2, s4 );  a4 *= a4;
 
-	n = !(level & 1);		// Odd level numbers: n=1, ..
-	++n;				// .. even: n=2 (*)
+	n = !(level & 1);               // Odd level numbers: n=1, ..
+	++n;                            // .. even: n=2 (*)
 
 #ifdef DISABLED_CODE
 s1 = a1 = 1;
@@ -113,7 +113,7 @@ s4 = a4 = 0;
 n = level;
 #endif
 
-	int fi_max = n * (s1 + s2 + s3 + s4);	// Number of formatios to create
+	int fi_max = n * (s1 + s2 + s3 + s4);   // Number of formatios to create
 
 	for( i = 0 ; i < n ; i++ ) {
 		if (fi < MAX_FORMATIONS) {
@@ -160,35 +160,35 @@ n = level;
  *
  * 1. Determine amount and tiers of enemies
  * 2. Break up groups of types into formations of 1(*), 4, 9, 16 enemies
- * 	2.1. Ratio of formations sizes? (50% single, rest in groups?)
+ *  2.1. Ratio of formations sizes? (50% single, rest in groups?)
  * 3. Distribute formations throughout the level
- * 	3.1. Evenly? Weighted to group size?
- * 	3.2. Adjust level size to amount of enemies?
+ *  3.1. Evenly? Weighted to group size?
+ *  3.2. Adjust level size to amount of enemies?
  *
  * Determining amount and tiers of enemies
- *   Level	A	B	C	D
- *   1		7
- *   2		8	1
- *   3		9	2
- *   4		10	3
- *   5		11	4
- *   6		12	5
- *   7		13	6
- *   8		14	7
- *   9		15	8	1
- *   10		16	9	2
- *   11		17	10	3
- *   12		18	11	4
- *   13		19	12	5
- *   14		20	13	6
- *   15		21	14	7
- *   16		22	15	8	1
- *   17		23	16	9	2
- *   18		24	17	10	3
- *   19		25	18	11	4
- *   20		26	19	12	5
- *   21		27	20	13	6
- *   22		28	21	14	7
+ *   Level  A     B     C     D
+ *    1     7
+ *    2     8     1
+ *    3     9     2
+ *    4    10     3
+ *    5    11     4
+ *    6    12     5
+ *    7    13     6
+ *    8    14     7
+ *    9    15     8     1
+ *   10    16     9     2
+ *   11    17    10     3
+ *   12    18    11     4
+ *   13    19    12     5
+ *   14    20    13     6
+ *   15    21    14     7
+ *   16    22    15     8    1
+ *   17    23    16     9    2
+ *   18    24    17    10    3
+ *   19    25    18    11    4
+ *   20    26    19    12    5
+ *   21    27    20    13    6
+ *   22    28    21    14    7
  */
 
 void create_wave2(
@@ -240,10 +240,10 @@ void create_wave2(
  * known before actual creation for positioning
  */
 
-#define LT1	+8	//+6
-#define LT2	+1	//-1
-#define LT3	-4	//-8
-#define	LT4	-9	//-15
+#define LT1  (+8)   //+6
+#define LT2  (+1)   //-1
+#define LT3  (-4)   //-8
+#define	LT4  (-9)   //-15
 
 int calc_nr_units( int level )
 {
@@ -262,7 +262,7 @@ int calc_nr_units( int level )
 			nr_enemies -= i*i;
 		}
 	}
-	nr_units += nr_enemies;	// Left over enemies will be units of one.
+	nr_units += nr_enemies;   // Left over enemies will be units of one.
 
 	return nr_units;
 }
@@ -309,9 +309,9 @@ void advance_to_next_level( program_state_t* PS, game_state_t* GS )
 
 	//...! record score
 
-	//...GS->shots_fired	= 0;
-	//...GS->shots_missed	= 0;
-	//...GS->best_resource	= 0;
+	//...GS->shots_fired   = 0;
+	//...GS->shots_missed  = 0;
+	//...GS->best_resource = 0;
 
 	++GS->current_level;
 
@@ -355,14 +355,14 @@ void prepare_first_level( program_state_t* PS, game_state_t* GS )
 	GS->next_recharge_after_us = RECHARGE_TIME;
 
 	GS->add_enemy_beyond_y = calculate_enemy_beyond_y( GS );
-	GS->nr_warp_enemies = MIN_WARP_ENEMIES;	// Next time, the player warps around,
-					// ..spawn one new enemy.
+	GS->nr_warp_enemies = MIN_WARP_ENEMIES; // Next time, the player warps
+	                                        // .. around, spawn a new enemy.
 
 	GS->black_hole.random_seed = 0;
 	generate_black_hole( GS );
 
 	GS->current_level = 0;
-	advance_to_next_level( PS, GS );	// Increases level, spawns enemies
+	advance_to_next_level( PS, GS );     // Increases level, spawns enemies
 }
 
 

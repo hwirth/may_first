@@ -30,25 +30,25 @@ typedef enum ai_modes_e {
 	FREE, FORMATION, RANK_TRANSIT, FOLLOW, CRASH_INTO, ORBIT
 } ai_modes_t;
 
-typedef struct thruster_state_s	thruster_state_t;	// Ship (player)
-typedef struct weapon_s		weapon_t;
-typedef struct ship_s		ship_t;
+typedef struct thruster_state_s thruster_state_t;       // Ship (player)
+typedef struct weapon_s         weapon_t;
+typedef struct ship_s           ship_t;
 
-typedef struct formation_rank_s	formation_rank_t;	// Enemy
-typedef struct formation_s	formation_t;
-typedef struct enemy_s		enemy_t;
+typedef struct formation_rank_s formation_rank_t;       // Enemy
+typedef struct formation_s      formation_t;
+typedef struct enemy_s          enemy_t;
 
-typedef struct laser_beam_s	laser_beam_t;		// Various objects
-typedef struct homing_torpedo_s	homing_torpedo_t;
-typedef struct explosion_s	explosion_t;
-typedef struct black_hole_s	black_hole_t;
-typedef struct bonus_bubble_s	bonus_bubble_t;
+typedef struct laser_beam_s     laser_beam_t;           // Various objects
+typedef struct homing_torpedo_s homing_torpedo_t;
+typedef struct explosion_s      explosion_t;
+typedef struct black_hole_s     black_hole_t;
+typedef struct bonus_bubble_s   bonus_bubble_t;
 
-typedef struct camera_s		camera_t;		// UI
-typedef struct sounds_s		sounds_t;
+typedef struct camera_s         camera_t;               // UI
+typedef struct sounds_s         sounds_t;
 
-typedef struct score_info_s	score_info_t;		// Game
-typedef struct game_state_s	game_state_t;
+typedef struct score_info_s     score_info_t;           // Game
+typedef struct game_state_s     game_state_t;
 
 
 // STRUCTS ////////////////////////////////////////////////////////////////////
@@ -57,19 +57,19 @@ struct thruster_state_s {
 	microtime_t forward_until_us;
 	microtime_t pay_after_us;
 
-	bool_t	left, right;
-	bool_t	forward, back;
+	bool_t left, right;
+	bool_t forward, back;
 };
 
 struct weapon_s {
-	bool_t enabled;			// Must be achieved in-game to enable
-	microtime_t blink_start_us;	// HUD: When the blinking started
-	microtime_t blink_until_us;	// HUD: When to stop blinking
-	microtime_t fire_next_beam_us;	// When the next auto fire shot
-					// will be fired (used for the
-					// initial delay before auto-
-					// fire starts)
-	int auto_fire_count ;		// Used to limit burst length
+	bool_t enabled;                  // Must be achieved in-game to enable
+	microtime_t blink_start_us;      // HUD: When the blinking started
+	microtime_t blink_until_us;      // HUD: When to stop blinking
+	microtime_t fire_next_beam_us;   // When the next auto fire shot
+	                                 // will be fired (used for the
+	                                 // initial delay before auto-
+	                                 // fire starts)
+	int auto_fire_count ;            // Used to limit burst length
 };
 
 struct ship_s {
@@ -84,8 +84,8 @@ struct ship_s {
 
 	real_t distance_to_black_hole;
 
-	real_t camera_speed_pitch;	// Move camera according to speed..
-	real_t speed_target_pitch;	// ..but do the change smoothly
+	real_t camera_speed_pitch;        // Move camera according to speed..
+	real_t speed_target_pitch;        // ..but do the change smoothly
 };
 
 
@@ -93,15 +93,15 @@ struct ship_s {
 
 struct formation_rank_s {
 	enemy_t* occupied_by;
-	vector_t position;		// Relative to formation.position
+	vector_t position;                    // Relative to formation.position
 
 	coordinate_t coordinate;
-	int fillfrom_index[NR_FILLFROM_RANKS];	//... int --> formation_rank_t*
+	int fillfrom_index[NR_FILLFROM_RANKS];  //... int --> formation_rank_t*
 };
 
 struct formation_s {
-	//bool_t   active;	// Not implemented, because
-				// active == (nr_ranks != 0)
+	//bool_t active;                        // Not implemented, because
+	                                        // active == (nr_ranks != 0)
 	vector_t position;
 	vector_t velocity;
 
@@ -111,8 +111,8 @@ struct formation_s {
 
 struct enemy_s {
 	bool_t active;
-	microtime_t indicate_hit_until_us;	// Blink
-	microtime_t shoot_wait_until_us;	// Hold fire until time
+	microtime_t indicate_hit_until_us;      // Blink
+	microtime_t shoot_wait_until_us;        // Hold fire until time
 
 	vector_t position;
 	vector_t velocity;
@@ -123,12 +123,12 @@ struct enemy_s {
 	int hit_points;
 	int score;
 
-	ai_modes_t ai_mode;			// How the enemy is controlled
+	ai_modes_t ai_mode;                     // How the enemy is controlled
 
-	formation_t* formation;			// NULL if freely moving
-	formation_rank_t* current_rank;		// Where the enemy "parks"
-	formation_rank_t* target_rank;		// When changing position..
-	microtime_t rank_change_start_us;	// ..within the formation
+	formation_t* formation;                 // NULL if freely moving
+	formation_rank_t* current_rank;         // Where the enemy "parks"
+	formation_rank_t* target_rank;          // When changing position..
+	microtime_t rank_change_start_us;       // ..within the formation
 };
 
 
@@ -140,9 +140,9 @@ struct laser_beam_s {
 	vector_t position;
 	vector_t velocity;
 
-	int owner;		// Less than zero: Player weapon
-	real_t decay_beyond_y;	// Built-in self-destruct ("firing range")
-	real_t speed_bonus;	// Fired at slow speed reduces Resource gain
+	int owner;               // Less than zero: Player weapon
+	real_t decay_beyond_y;   // Built-in self-destruct ("firing range")
+	real_t speed_bonus;      // Fired at slow speed reduces Resource gain
 };
 
 struct homing_torpedo_s {
@@ -176,8 +176,8 @@ struct bonus_bubble_s {
 	vector_t position;
 	color_t color;
 
-	int tier;		// Which weapon this bubble may unlock.
-	int resource;		// How much Resource the player may gather
+	int tier;       // Which weapon this bubble may unlock.
+	int resource;   // How much Resource the player may gather
 };
 
 
@@ -212,12 +212,12 @@ struct sounds_s {
 // GAME ///////////////////////////////////////////////////////////////////////
 
 struct score_info_s {
-	int current;		// Collected score by killing enemies
-	int high_score;		// Overall high score..
-	int high_score_level;	// ..and the level reached
+	int current;            // Collected score by killing enemies
+	int high_score;         // Overall high score..
+	int high_score_level;   // ..and the level reached
 
-	int distance;		// Total score values calculated in..
-	int speed;		// .. calulate_total_score()
+	int distance;           // Total score values calculated in..
+	int speed;              // .. calulate_total_score()
 	int best_resource;
 	int nr_killed_enemies;
 	int hit_ratio;
@@ -226,48 +226,48 @@ struct score_info_s {
 struct game_state_s {
 	int current_level;
 
-	ship_t		ship;
-	black_hole_t	black_hole;
+	ship_t         ship;
+	black_hole_t   black_hole;
 
-	formation_t	formations	[MAX_FORMATIONS];
-	enemy_t		enemies		[MAX_ENEMIES];
-	laser_beam_t	laser_beams	[MAX_LASER_BEAMS];
-	explosion_t	explosions	[MAX_EXPLOSIONS];
-	bonus_bubble_t	bonus_bubbles	[MAX_BONUS_BUBBLES];
+	formation_t    formations    [MAX_FORMATIONS];
+	enemy_t        enemies       [MAX_ENEMIES];
+	laser_beam_t   laser_beams   [MAX_LASER_BEAMS];
+	explosion_t    explosions    [MAX_EXPLOSIONS];
+	bonus_bubble_t bonus_bubbles [MAX_BONUS_BUBBLES];
 
-	int		nr_active_formations;
+	int nr_active_formations;
 
-	int		nr_active_lasers;
-	int		nr_active_explosions;
+	int nr_active_lasers;
+	int nr_active_explosions;
 
-	int		nr_active_enemies_total;
-	int		nr_active_enemies[NR_TIERS];
+	int nr_active_enemies_total;
+	int nr_active_enemies[NR_TIERS];
 
-	int		nr_active_bonus_bubbles_total;
-	int		nr_active_bonus_bubbles[NR_TIERS];
+	int nr_active_bonus_bubbles_total;
+	int nr_active_bonus_bubbles[NR_TIERS];
 
-	camera_t	camera;
-	sounds_t 	sounds;
+	camera_t camera;
+	sounds_t sounds;
 
-	int shots_fired;	// How many beams the player started so far
-	int shots_en_route;	// How many of those beams are still active
-	int shots_missed;	// Beams decayed before they hit anything
-	int enemies_killed;	// For score calculation
+	int shots_fired;        // How many beams the player started so far
+	int shots_en_route;     // How many of those beams are still active
+	int shots_missed;       // Beams decayed before they hit anything
+	int enemies_killed;     // For score calculation
 
-	int current_resource;	// Current Resource amount
-	int best_resource;	// Highest Resource recorded in this round
+	int current_resource;   // Current Resource amount
+	int best_resource;      // Highest Resource recorded in this round
 
-	score_info_t	score;
-	microtime_t	blink_highscore_until_us;
-	microtime_t	show_wave_until_us;	// Wave number at screen center
+	score_info_t score;
+	microtime_t blink_highscore_until_us;
+	microtime_t show_wave_until_us;   // Wave number at screen center
 
 	// Automatic recharging
-	microtime_t next_recharge_after_us;	// At least travel for a while
-	real_t next_recharge_beyond_y;	// At least travel beyond this y pos.
+	microtime_t next_recharge_after_us;   // At least travel for a while
+	real_t next_recharge_beyond_y;    // At least travel beyond this y pos.
 
-	real_t add_enemy_beyond_y;	// Penalty extra enemies, when the..
-	int nr_warp_enemies;		// ..player doesn't kill within one
-					// FIELD_HEIGHT (one "warp around")
+	real_t add_enemy_beyond_y;        // Penalty extra enemies, when the..
+	int nr_warp_enemies;              // ..player doesn't kill within one
+	                                  // FIELD_HEIGHT (one "warp around")
 }; // game_state_s
 
 

@@ -8,26 +8,26 @@
 ******************************************************************************/
 
 #include <stdarg.h>
-#include <sys/time.h>		// gettimeofday()
+#include <sys/time.h>     // gettimeofday()
 
-#include "main.h"		// Flow control, program state, run modes
-#include "draw_frame.h"		// Renders the current game state to screen
-#include "game.h"		// Game related settings, game state control
-#include "world.h"		// Simulation, advances game state step wise
-#include "ui.h"			// Window settings, process_event_queue()
+#include "main.h"         // Flow control, program state, run modes
+#include "draw_frame.h"   // Renders the current game state to screen
+#include "game.h"         // Game related settings, game state control
+#include "world.h"        // Simulation, advances game state step wise
+#include "ui.h"           // Window settings, process_event_queue()
 
 
 // GLOBAL VARIABLES ///////////////////////////////////////////////////////////
 
 program_state_t program_state = {
-	.run_mode		= RM_INIT,
-	.window_width		= INITIAL_WINDOW_WIDTH,
-	.window_height		= INITIAL_WINDOW_HEIGHT,
-	.next_fps_sample	= 0,
-	.frame_times		= {0},	// See:
+	.run_mode        = RM_INIT,
+	.window_width    = INITIAL_WINDOW_WIDTH,
+	.window_height   = INITIAL_WINDOW_HEIGHT,
+	.next_fps_sample = 0,
+	.frame_times     = {0},   // See:
 	// http://stackoverflow.com/questions/5636070/zero-an-array-in-c-code
-	.initial_TAS		= -1,
-	.debug			= DEBUG,
+	.initial_TAS     = -1,
+	.debug           = DEBUG,
 
 #if START_IN_FULLSCREEN
 	.screen_flags = SDL_OPENGL | SDL_DOUBLEBUF | SDL_FULLSCREEN,
@@ -45,7 +45,7 @@ void debugf( bool_t do_print, char* format_string, ... )
 {
 #if DEBUG
 	if (do_print) {
-		va_list	argp;
+		va_list argp;
 
 		va_start( argp, format_string );
 		vprintf( format_string, argp );
@@ -209,26 +209,26 @@ int main( int argc, char* argv[] )
 
 	PS->program_start_us = get_time();
 
-	init_sdl( PS, GS );	// Create window, load sounds
-	init_sound( PS, GS );	// Load music, sounds, set volume
-	init_font( PS );	// Load font
-	init_opengl( PS );	// Load textures
+	init_sdl( PS, GS );     // Create window, load sounds
+	init_sound( PS, GS );   // Load music, sounds, set volume
+	init_font( PS );        // Load font
+	init_opengl( PS );      // Load textures
 
 	play_music( snd->music );
 
 	load_highscore( GS );
 
-	PS->current_time_us	=
-	PS->frame_start_us	= get_time();
+	PS->current_time_us    =
+	PS->frame_start_us     = get_time();
 
 	// Make the following look nice in debug info
-	PS->game_start_us	=
-	PS->pause_since_us	= PS->program_start_us - 1;
+	PS->game_start_us      =
+	PS->pause_since_us     = PS->program_start_us - 1;
 
-	PS->tick_fraction_s 	= -1;
+	PS->tick_fraction_s    = -1;
 
-	PS->highest_frame_time	= 0;
-	PS->lowest_frame_time	= 99999999;
+	PS->highest_frame_time = 0;
+	PS->lowest_frame_time  = 99999999;
 
 	PS->run_mode = RM_INTRO;
 
@@ -282,21 +282,19 @@ int main( int argc, char* argv[] )
 		// Keep track of how many FPS we actually achieved
 		PS->frame_time_us   = get_time() - PS->frame_start_us;
 
-		PS->highest_frame_time
-			= max(	PS->highest_frame_time,
-				PS->frame_time_us
-			)
-		;
-		PS->lowest_frame_time
-			= min(	PS->lowest_frame_time,
-				PS->frame_time_us
-			)
-		;
+		PS->highest_frame_time = max(
+			PS->highest_frame_time,
+			PS->frame_time_us
+		);
+		PS->lowest_frame_time = min(
+			PS->lowest_frame_time,
+			PS->frame_time_us
+		);
 
 		PS->frame_start_us  = get_time();
 		PS->tick_fraction_s = (real_t)PS->frame_time_us / 1000000.0;
 
-		save_frame_time( PS );	// For average FPS
+		save_frame_time( PS );   // For average FPS
 		PS->average_frame_time = average_frame_time( PS );
 	}
 
@@ -321,7 +319,7 @@ int main( int argc, char* argv[] )
 
 	Mix_FreeMusic( snd->music );
 
-	SDL_Quit();	// Will (allegedly) also free  screen .
+	SDL_Quit();   // Will (allegedly) also free  screen .
 
 	return 0;
 }

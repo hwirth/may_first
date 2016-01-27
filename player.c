@@ -11,8 +11,8 @@
 #include "player.h"
 #include "main.h"
 #include "game.h"
-#include "world.h"	// add_laser_beam()
-#include "ui.h"	// play_sound()
+#include "world.h"    // add_laser_beam()
+#include "ui.h"       // play_sound()
 
 
 /* start_fire()
@@ -56,8 +56,8 @@ void start_fire(
 				+ AUTO_FIRE_INTERVAL
 			;
 			wpn->auto_fire_count++;
-		}
-		else {	// First shot of autofire
+		} else {
+			// First shot of autofire
 			wpn->fire_next_beam_us
 				= PS->current_time_us
 				+ AUTO_FIRE_DELAY
@@ -131,8 +131,8 @@ void start_round_shot(
 				new_velocity,
 				new_speed_bonus
 			);
-			new_velocity.x *= (-1);	// Fire into the other..
-						// ..direction as well
+			new_velocity.x *= (-1);   // Fire into the other..
+			                          // ..direction as well
 			add_laser_beam(
 				GS,
 				OWNER_PLAYER_NO_RESPAWN,
@@ -149,8 +149,8 @@ void start_round_shot(
 				+ AUTO_FIRE_INTERVAL
 			;
 			wpn->auto_fire_count++;
-		}
-		else {	// First shot
+		} else {
+			// First shot
 			wpn->fire_next_beam_us
 				= PS->current_time_us
 				+ AUTO_FIRE_DELAY
@@ -175,11 +175,11 @@ void continue_fire( program_state_t* PS, game_state_t* GS, int weapon_nr )
 	weapon_t* wpn = &GS->ship.weapons[weapon_nr];
 
 	if (!wpn->enabled) {
-		return;		// Prevent denied-sound from being played
+		return;        // Prevent denied-sound from being played
 	}
 
 	if (!GS->ship.weapons[WEAPON_AUTOFIRE].enabled) {
-		return;		// Auto fire not installed
+		return;        // Auto fire not installed
 	}
 
 	if (
@@ -222,32 +222,32 @@ void start_move( program_state_t* PS, game_state_t* GS, direction_t direction )
 	thruster_state_t* ts = &(GS->ship.thruster_state);
 
 	switch (direction) {
-	case LEFT:	ts->left    = TRUE; 	break;
-	case RIGHT:	ts->right   = TRUE; 	break;
-	case FORWARD:	ts->forward = TRUE;
-
+	case LEFT:     ts->left    = TRUE;   break;
+	case RIGHT:    ts->right   = TRUE;   break;
+	case FORWARD:  ts->forward = TRUE;
 #if LIMIT_FORWARD_SPEEDING
-			ts->forward_until_us
-				= PS->current_time_us
-				+ FORWARD_THRUSTING_MAX_TIME
-			;
-			ts->pay_after_us
-				= PS->current_time_us
-				+ FORWARD_THRUSTING_PAY_TIME
-			;
+		ts->forward_until_us
+			= PS->current_time_us
+			+ FORWARD_THRUSTING_MAX_TIME
+		;
+		ts->pay_after_us
+			= PS->current_time_us
+			+ FORWARD_THRUSTING_PAY_TIME
+		;
 #endif
-						break;
-	case BACK:	ts->back    = TRUE; 	break;
+		break;
+
+	case BACK:     ts->back    = TRUE;   break;
 	}
 }
 
 void stop_move( program_state_t* PS, game_state_t* GS, direction_t direction )
 {
 	switch (direction) {
-	case LEFT:	GS->ship.thruster_state.left    = FALSE;	break;
-	case RIGHT:	GS->ship.thruster_state.right   = FALSE;	break;
-	case FORWARD:	GS->ship.thruster_state.forward = FALSE;	break;
-	case BACK:	GS->ship.thruster_state.back    = FALSE;	break;
+	case LEFT:     GS->ship.thruster_state.left    = FALSE;  break;
+	case RIGHT:    GS->ship.thruster_state.right   = FALSE;  break;
+	case FORWARD:  GS->ship.thruster_state.forward = FALSE;  break;
+	case BACK:     GS->ship.thruster_state.back    = FALSE;  break;
 	}
 }
 

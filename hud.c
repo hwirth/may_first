@@ -20,7 +20,7 @@
 #include "game.h"
 
 #if DEBUG_MEMORY
-#include <malloc.h>	// Memory usage debug info
+#include <malloc.h>   // Memory usage debug info
 #endif
 
 
@@ -43,10 +43,10 @@ void hud_printf(
 	...
 	)
 {
-	va_list	argp;
+	va_list argp;
 	char* s;
 
-	GLuint	new_texture = 0;
+	GLuint new_texture = 0;
 	int w, h;
 
 
@@ -138,10 +138,10 @@ void hud_print_time(
 	free( s );
 }
 
-#define LEVEL_QUAD_WIDTH	25
-#define LEVEL_QUAD_HEIGHT	35
-#define LEVEL_OFFSET_X		(PS->line_height + LEVEL_QUAD_WIDTH)
-#define LEVEL_OFFSET_Y		(PS->window_height - 7*PS->line_height/2)
+#define LEVEL_QUAD_WIDTH   25
+#define LEVEL_QUAD_HEIGHT  35
+#define LEVEL_OFFSET_X     (PS->line_height + LEVEL_QUAD_WIDTH)
+#define LEVEL_OFFSET_Y     (PS->window_height - 7*PS->line_height/2)
 void hud_draw_level_nr( program_state_t* PS, game_state_t* GS )
 {
 	const int w = LEVEL_QUAD_WIDTH;
@@ -171,15 +171,15 @@ void hud_draw_level_nr( program_state_t* PS, game_state_t* GS )
 
 	glBegin( GL_QUADS );
 	glColor4f( 1,1,1, 0.5 );
-					// more centered vertically.
+	                                // more centered vertically.
 	while (number || draw_zero) {
 		digit_x = ((number % 10) / 10.0);
-		draw_zero = FALSE;	// Only draw the zero once
+		draw_zero = FALSE;      // Only draw the zero once
 
-		glTexCoord2f( digit_x,     1 );	glVertex2i( quad_x,   y-h/2 );
-		glTexCoord2f( digit_x+0.1, 1 );	glVertex2i( quad_x+w, y-h/2 );
-		glTexCoord2f( digit_x+0.1, 0 );	glVertex2i( quad_x+w, y+h/2 );
-		glTexCoord2f( digit_x,     0 );	glVertex2i( quad_x,   y+h/2 );
+		glTexCoord2f( digit_x,     1 );  glVertex2i( quad_x,   y-h/2 );
+		glTexCoord2f( digit_x+0.1, 1 );  glVertex2i( quad_x+w, y-h/2 );
+		glTexCoord2f( digit_x+0.1, 0 );  glVertex2i( quad_x+w, y+h/2 );
+		glTexCoord2f( digit_x,     0 );  glVertex2i( quad_x,   y+h/2 );
 
 		quad_x -= LEVEL_QUAD_WIDTH;
 		number /= 10;
@@ -243,8 +243,8 @@ void draw_hud_panel_background( program_state_t* PS, alignment_t alignment )
 	glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	if (alignment & ALIGN_TOP) {
-		glColor4f( 1,1,1, 0.2 );	//... Why does this color look
-		glBegin( GL_QUADS );		//... as bright as the below??
+		glColor4f( 1,1,1, 0.2 );        //... Why does this color look
+		glBegin( GL_QUADS );            //... as bright as the below??
 			glVertex2i( 0, h );
 			glVertex2i( w, h );
 			glVertex2i( w, h - panel_height );
@@ -259,8 +259,8 @@ void draw_hud_panel_background( program_state_t* PS, alignment_t alignment )
 	}
 
 	if (alignment & ALIGN_BOTTOM) {
-		glColor4f( 1,1,1, 0.1 );	//... Why does this color look
-		glBegin( GL_QUADS );		//... as bright as the above??
+		glColor4f( 1,1,1, 0.1 );        //... Why does this color look
+		glBegin( GL_QUADS );            //... as bright as the above??
 			glVertex2i( 0, panel_height );
 			glVertex2i( w, panel_height );
 			glVertex2i( w, 0 );
@@ -315,8 +315,8 @@ void draw_hud_resource( program_state_t* PS, game_state_t* GS )
 		&R, &G, &B
 	);
 
-	resource_color				// Pack the float values into..
-		= ((int)(R * 255) << 16)	// ..a handy int.
+	resource_color                          // Pack the float values into..
+		= ((int)(R * 255) << 16)        // ..a handy int.
 		+ ((int)(G * 255) << 8)
 		+ ((int)(B * 255) << 0)
 	;
@@ -330,11 +330,10 @@ void draw_hud_resource( program_state_t* PS, game_state_t* GS )
 		h - 3*PS->line_height/2,
 		ALIGN_CENTER,
 		resource_color,
-		"RESOURCE: %d (%d)",
+		"ENERGY: %d (%d)",
 		GS->current_resource,
 		GS->best_resource
 	);
-
 
 	/* CALCULATE BLINK COLOR */
 
@@ -342,11 +341,12 @@ void draw_hud_resource( program_state_t* PS, game_state_t* GS )
 
 	if (resource >= 200) {
 		/* Reuse R, G and B from above, no change needed */
-	}
-	else {	if      (resource < 50)	i = 150000;
-		else if (resource < 100)	i = 225000;
-		else if (resource < 150)	i = 350000;
-		else 					i = 500000;
+	} else {
+		if      (resource < 50)   i = 150000;
+		else if (resource < 100)  i = 225000;
+		else if (resource < 150)  i = 350000;
+		else {                    i = 500000;
+		}
 
 		GLfloat f = fabs((int)(Tc % i) - i/2) / ((GLfloat)i/2);
 		R = R * f;
@@ -358,8 +358,8 @@ void draw_hud_resource( program_state_t* PS, game_state_t* GS )
 			R = G = B = 1.0;
 		}
 	}
-	resource_color				// Pack the float values into..
-		= ((int)(R * 255) << 16)	// ..a handy int.
+	resource_color                          // Pack the float values into..
+		= ((int)(R * 255) << 16)        // ..a handy int.
 		+ ((int)(G * 255) << 8)
 		+ ((int)(B * 255) << 0)
 	;
@@ -368,7 +368,7 @@ void draw_hud_resource( program_state_t* PS, game_state_t* GS )
 	/* RESOURCE BAR */
 
 	// Calculate size of the bar
-	bar_width = sqrt(resource) * 10.0;	//... Perhaps we should use  log2 ?
+	bar_width = sqrt(resource) * 10.0;   //... Perhaps we should use log2 ?
 	step_size = round( bar_width / hit_points );
 
 	glBegin( GL_LINES );
@@ -385,12 +385,22 @@ void draw_hud_resource( program_state_t* PS, game_state_t* GS )
 		}
 	}
 	glEnd();
+
+	hud_printf(
+		PS,
+		PS->window_width/2,
+		h - 9*PS->line_height/2,
+		ALIGN_CENTER,
+		resource_color,
+		"%d",
+		hit_points
+	);
 }
 
 
 // CURRENT ENEMIES ////////////////////////////////////////////////////////////
 
-#define ICON_SIZE	12
+#define ICON_SIZE  12
 
 void draw_current_enemy(
 	program_state_t* PS,
@@ -486,11 +496,11 @@ void hud_current_enemies( program_state_t* PS, game_state_t* GS )
 
 		enemies_tens  = nr_enemies / 10;
 		enemies_ones  = nr_enemies % 10;
-		nr_enemies = enemies_tens + enemies_ones;	// Number of actual icons
+		nr_enemies = enemies_tens + enemies_ones;   // Number of actual icons
 
 		bubbles_tens  = nr_bubbles / 10;
 		bubbles_ones  = nr_bubbles % 10;
-		nr_bubbles = bubbles_tens + bubbles_ones;	// Number of actual icons
+		nr_bubbles = bubbles_tens + bubbles_ones;   // Number of actual icons
 
 		x = 0;
 
@@ -508,7 +518,7 @@ void hud_current_enemies( program_state_t* PS, game_state_t* GS )
 		}
 	}
 
-	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );	//GL_FILL
+	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );   //GL_FILL
 	glLineWidth( 1 );
 
 	glDisable( GL_POLYGON_SMOOTH );
@@ -560,8 +570,8 @@ void hud_weapon_state(
 			? COLOR_DISABLED_LO
 			: COLOR_BLINK_HI
 		;
-	}
-	else {	color_enabled  = COLOR_ENABLED_HI;
+	} else {
+		color_enabled  = COLOR_ENABLED_HI;
 		color_disabled = COLOR_DISABLED_HI;
 	}
 
@@ -586,7 +596,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 	int h = PS->window_height;
 	int x = w/2;
 	int y = 3*h/5;
-	int i = 6;	// Initial upwards offset, half of text shown
+	int i = 6;                // Initial upwards offset, half of text shown
 
 	int score         = GS->score.current;
 	int total_score   = calculate_total_score( PS, GS );
@@ -628,7 +638,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 			( (si->distance == 0) ? 1 : si->distance )
 	);
 #endif
-	--i;	// Omit one line
+	--i;   // Omit one line
 
 	hud_printf(
 		PS,
@@ -657,13 +667,13 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		x,
 		y + (i--) * (PS->line_height),
 		ALIGN_CENTER, 0xAAAAAA,
-		"BEST RESOURCE  %7d  x%7d  = %7d",
+		"ENERGY MAXIMUM %7d  x%7d  = %7d",
 		si->best_resource,
 		BONUS_FACTOR_BEST_RESOURCE,
 		BONUS_FACTOR_BEST_RESOURCE * si->best_resource
 	);
 
-	--i;	// Omit one line
+	--i;   // Omit one line
 
 
 	hud_printf(
@@ -675,7 +685,7 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		total_score
 	);
 
-	--i;	// Omit one line
+	--i;   // Omit one line
 
 	hud_printf(
 		PS,

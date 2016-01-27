@@ -82,9 +82,9 @@ enemy_t* add_enemy(
 	formation_t* new_formation
 	)
 {
-	real_t agressiveness;		// How often this enemy will shoot
-	real_t speed;			// Base for calculating velocity
-	real_t score;			//... RESOURCE gained upon kill
+	real_t agressiveness;   // How often this enemy will shoot
+	real_t speed;           // Base for calculating velocity
+	real_t score;           //... RESOURCE gained upon kill
 
 	enemy_t* e = find_inactive_enemy( GS );
 
@@ -114,8 +114,8 @@ enemy_t* add_enemy(
 					speed
 				)
 			;
-		}
-		else {	e->velocity.x =
+		} else {
+			e->velocity.x =
 			e->velocity.y =
 			e->velocity.z = 0;
 		}
@@ -186,11 +186,11 @@ void enemy_takes_hit(
 	laser_beam_t* l
 	)
 {
-	if (l->owner < 0) {		// Player
+	if (l->owner < 0) {              // Player
 		e->hit_points--;
 
 #if ENEMIES_CHANGE_DIRECTION_ON_HIT
-		e->velocity.x *= (-1);	// Change direction
+		e->velocity.x *= (-1);   // Change direction
 		if (e->formation != NULL) {
 			formation_turn_around( GS, e->formation );
 		}
@@ -203,7 +203,7 @@ void enemy_takes_hit(
 			+ HIT_INDICATION_TIME_US
 		;
 	}
-	else if (l->owner < 0) {	// Player
+	else if (l->owner < 0) {         // Player
 
 		GS->score.current += e->score * BONUS_FACTOR_SCORE;
 
@@ -234,7 +234,7 @@ void enemy_takes_hit(
 
 		// Reset ENEMY BEYOND counter
 		GS->add_enemy_beyond_y = calculate_enemy_beyond_y( GS );
-		GS->nr_warp_enemies = MIN_WARP_ENEMIES;	// Reset spawn amount
+		GS->nr_warp_enemies = MIN_WARP_ENEMIES;   // Reset spawn amount
 
 		play_sound( GS->sounds.hit );
 	}
@@ -266,7 +266,7 @@ void enemy_ai_control( program_state_t* PS, game_state_t* GS, int enemy_nr )
 	vector_t vel;
 
 	switch (e->ai_mode) {
-	case FORMATION:		// Fall through
+	case FORMATION:      // Fall through
 	case RANK_TRANSIT:
 		vel = e->formation->velocity;
 		break;
@@ -279,7 +279,7 @@ void enemy_ai_control( program_state_t* PS, game_state_t* GS, int enemy_nr )
 	) {
 		if (fabs(pos.x + vel.x) > fabs(pos.x)) {
 			switch (e->ai_mode) {
-			case FORMATION:		// Fall through
+			case FORMATION:      // Fall through
 			case RANK_TRANSIT:
 				formation_turn_around( GS, e->formation );
 				break;
@@ -444,7 +444,7 @@ void advance_enemy_rank_transit(
 		/ RANK_TRANSIT_TIME
 	;
 
-	if (progress < 1.0) {	// Less than 100% travelled?
+	if (progress < 1.0) {   // Less than 100% travelled?
 
 		current_offset = multiply_vector_scalar(
 			path,
@@ -459,7 +459,7 @@ void advance_enemy_rank_transit(
 			current_offset
 		);
 	}
-	else {	// Target position reached
+	else {   // Target position reached
 
 		e->current_rank = e->target_rank;
 		e->target_rank = NULL;
@@ -492,9 +492,9 @@ void advance_enemy_position(
 	enemy_t* e = enemy;
 
 	switch (e->ai_mode) {
-	case FREE:		advance_enemy_free( PS, e );		break;
-	case RANK_TRANSIT:	advance_enemy_rank_transit( PS, e );	break;
-	case FORMATION:		advance_enemy_formation( PS, e );	break;
+	case FREE:          advance_enemy_free( PS, e );          break;
+	case RANK_TRANSIT:  advance_enemy_rank_transit( PS, e );  break;
+	case FORMATION:     advance_enemy_formation( PS, e );     break;
 	case FOLLOW:
 	case CRASH_INTO:
 	case ORBIT:

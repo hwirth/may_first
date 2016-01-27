@@ -12,13 +12,13 @@
 #include "ui.h"
 
 
-#define ROTATION_DURATION	(1000000 * 10)
-#define RADIUS			100.0
-#define RADIUS_OFFSET		0.1
-#define CAMERA_ANGLE		-75.0
-#define CAMERA_DISTANCE		15.0
-#define CAMERA_OFFSET		13.0	// Positivie values move image up
-#define FOG_DENSITY		0.02
+#define ROTATION_DURATION  (1000000 * 10)
+#define RADIUS             100.0
+#define RADIUS_OFFSET      0.1
+#define CAMERA_ANGLE       (-75.0)
+#define CAMERA_DISTANCE    15.0
+#define CAMERA_OFFSET      13.0             // Positivie values move image up
+#define FOG_DENSITY        0.02
 
 
 void draw_grid( program_state_t* PS )
@@ -40,18 +40,18 @@ void draw_grid( program_state_t* PS )
 	GLfloat aspect = (GLfloat)w / (GLfloat)h;
 
 	glViewport( 0, 0, w, h );
-	glClearColor( 0.0f, 0.0f, 0.1f, 1.0f );	// Background dark blue, opaque
+	glClearColor( 0.0f, 0.0f, 0.1f, 1.0f ); // Background dark blue, opaque
 	glClearDepth( 1.0f );                   // Background depth to farthest
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 	// Draw the 3D scene
-	glMatrixMode( GL_PROJECTION );		// Setup perspective mode
+	glMatrixMode( GL_PROJECTION );          // Setup perspective mode
 	glLoadIdentity();
 	gluPerspective(
-		75.0f,				// fovy   Field of View, y-Axis
-		aspect,				// Aspect ratio of the screen
-		0.1f,				// zNear
-		3000.0				// zFar
+		75.0f,                          // fovy   Field of View, y-Axis
+		aspect,                         // Aspect ratio of the screen
+		0.1f,                           // zNear
+		3000.0                          // zFar
 	);
 
 	glMatrixMode( GL_MODELVIEW );
@@ -59,7 +59,7 @@ void draw_grid( program_state_t* PS )
 	glDepthFunc( GL_LESS );
 
 #ifdef INTRO_USES_FOG
-	GLfloat fog_color[4] = { 0,0,0, 0 };	// Fog of depth
+	GLfloat fog_color[4] = { 0,0,0, 0 };    // Fog of depth
 	glEnable( GL_FOG );
 	glFogi( GL_FOG_MODE, GL_EXP2 );
 	glFogfv( GL_FOG_COLOR, fog_color );
@@ -67,7 +67,7 @@ void draw_grid( program_state_t* PS )
 	glHint( GL_FOG_HINT, GL_NICEST );
 #endif
 
-	glLoadIdentity();			// Reset
+	glLoadIdentity();                       // Reset
 	glTranslatef( 0, CAMERA_OFFSET, -camera_distance );
 	glRotatef( CAMERA_ANGLE, 1,0,0 );
 	glRotatef( camera_rotation, 0,0,1 );
@@ -110,9 +110,9 @@ void draw_overlay( program_state_t* PS )
 
 	GLfloat R, G, B;
 
-	glViewport( 0, 0, w, h );		// Using screen coordinates
+	glViewport( 0, 0, w, h );               // Using screen coordinates
 
-	glMatrixMode( GL_PROJECTION );		// Setup 2D mode
+	glMatrixMode( GL_PROJECTION );          // Setup 2D mode
 	glLoadIdentity();
 	gluOrtho2D( 0, w, 0, h );
 

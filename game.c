@@ -7,7 +7,7 @@
 * game control.
 ******************************************************************************/
 
-#include <stdlib.h>		// rand()
+#include <stdlib.h>          // rand()
 #include <stdio.h>
 #include <math.h>
 #include <SDL/SDL_mixer.h>
@@ -18,7 +18,7 @@
 #include "world.h"
 #include "player.h"
 #include "enemy.h"
-#include "ui.h"	// PLAY_SOUNDS
+#include "ui.h"              // PLAY_SOUNDS
 
 
 // ACTIONS ////////////////////////////////////////////////////////////////////
@@ -96,16 +96,17 @@ int get_tier_color( int tier, real_t* R, real_t* G, real_t* B )
 	int color;
 
 	switch (tier) {
-		case TIER_1:	*R = 0.1;  *G = 0.1;  *B = 1.0;	break;
-		case TIER_2:	*R = 0.1;  *G = 1.0;  *B = 0.1;	break;
-		case TIER_3:	*R = 1.0;  *G = 0.1;  *B = 0.1;	break;
-		case TIER_4:	*R = 1.0;  *G = 1.0;  *B = 0.1;	break;
-		default:	*R = *G = *B = 0.5;
+		case TIER_1:  *R = 0.1;  *G = 0.1;  *B = 1.0;  break;
+		case TIER_2:  *R = 0.1;  *G = 1.0;  *B = 0.1;  break;
+		case TIER_3:  *R = 1.0;  *G = 0.1;  *B = 0.1;  break;
+		case TIER_4:  *R = 1.0;  *G = 1.0;  *B = 0.1;  break;
+		default:      *R = *G = *B = 0.5;
 	}
 
-	color	= ((int)(*R * 255) << 16)
-		+ ((int)(*G * 255) << 8)
-		+ ((int)(*B * 255) << 0)
+	color
+	= ((int)(*R * 255) << 16)
+	+ ((int)(*G * 255) << 8)
+	+ ((int)(*B * 255) << 0)
 	;
 
 	return color;
@@ -116,10 +117,10 @@ real_t get_tier_hitpoints( int tier )
 	real_t hit_points = 0;
 
 	switch (tier) {
-		case TIER_1:	hit_points = 1;		break;
-		case TIER_2:	hit_points = 3;		break;
-		case TIER_3:	hit_points = 6;		break;
-		case TIER_4:	hit_points = MOTHERSHIP_AGRESSIVENESS;
+		case TIER_1:  hit_points = 1;  break;
+		case TIER_2:  hit_points = 3;  break;
+		case TIER_3:  hit_points = 6;  break;
+		case TIER_4:  hit_points = MOTHERSHIP_AGRESSIVENESS;
 	}
 
 	return hit_points;
@@ -168,8 +169,8 @@ int calculate_hit_points( real_t resource )
 	);
 
 	return
-		1 +
-		(	(f >= 1)
+		1 + (
+			(f >= 1)
 			? 1 + (int) log2( f )
 			: 0
 		)
@@ -186,8 +187,8 @@ real_t calculate_hit_ratio( game_state_t* GS )
 
 	if (evaluated_shots == 0) {
 		return 0;
-	}
-	else {	return 1.0 - (real_t) GS->shots_missed / evaluated_shots;
+	} else {
+		return 1.0 - (real_t) GS->shots_missed / evaluated_shots;
 	}
 }
 
@@ -225,7 +226,7 @@ int rand_int( int* random_seed )
  */
 int calculate_total_score( program_state_t* PS, game_state_t* GS )
 {
-	const real_t min_speed = SPEED_Y / 2;	// Allow some back thrusting
+	const real_t min_speed = SPEED_Y / 2;   // Allow some back thrusting
 	const real_t max_speed = SPEED_Y * FORWARD_SPEED_FACTOR;
 
 	real_t s_elapsed = PS->game_time_us / 1000000.0;
@@ -236,10 +237,10 @@ int calculate_total_score( program_state_t* PS, game_state_t* GS )
 	real_t relative_max   = max_speed - min_speed;
 
 	real_t speed_ratio
-		= fmax(	0,
-			fmin( 1, relative_speed / relative_max )
-		)
-	;
+	= fmax(
+		0,
+		fmin( 1, relative_speed / relative_max )
+	);
 
 	score_info_t* si = &(GS->score);
 
@@ -248,7 +249,8 @@ int calculate_total_score( program_state_t* PS, game_state_t* GS )
 	si->hit_ratio     = calculate_hit_ratio(GS) * 100.0;
 	si->speed         = speed_ratio * 100.0;
 
-	return	  si->current
+	return
+		  si->current
 		+ si->current * si->hit_ratio / 100
 		+ si->current * si->speed / 100
 		+ si->best_resource * BONUS_FACTOR_BEST_RESOURCE
@@ -308,11 +310,11 @@ void save_highscore( program_state_t* PS, game_state_t* GS )
  */
 void reset_game( program_state_t* PS, game_state_t* GS )
 {
-PS->highest_frame_time	= 0;
-PS->lowest_frame_time	= 99999999;
+PS->highest_frame_time = 0;
+PS->lowest_frame_time  = 99999999;
 
 	save_highscore( PS, GS );
-	remove_all_objects( GS );	// Deactivate beams, explosions, ...
+	remove_all_objects( GS );        // Deactivate beams, explosions, ...
 	disable_weapons( GS );
 
 	GS->camera.angle    = INITIAL_CAMERA_ANGLE;
@@ -322,7 +324,7 @@ PS->lowest_frame_time	= 99999999;
 	PS->next_second_us = PS->game_start_us + 1000000;
 	PS->game_time_us = 0;
 
-	prepare_first_level( PS, GS );	// Create initial enemies
+	prepare_first_level( PS, GS );   // Create initial enemies
 
 	PS->run_mode = RM_RUNNING;
 }

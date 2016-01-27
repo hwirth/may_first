@@ -12,7 +12,7 @@
 #include "main.h"
 #include "game.h"
 #include "hud.h"
-#include "world.h"	// remove_explosion()
+#include "world.h"             // remove_explosion()
 #include "ui.h"
 #include "gl_helpers.h"
 
@@ -50,8 +50,8 @@ void set_color(
  */
 void draw_distance_marker(
 	program_state_t* PS,
-	GLfloat y,		// Position relative to the ship
-	int line_position_y,	// Coordinate of the labeled line
+	GLfloat y,             // Position relative to the ship
+	int line_position_y,   // Coordinate of the labeled line
 	real_t depth_factor
 	)
 {
@@ -84,14 +84,14 @@ void draw_distance_marker(
 	glBegin( GL_QUADS );
 	glColor4f( LABEL_COLOR, depth_factor );
 
-	y += LABEL_OFFSET_Y;		// Cheat offset to make numbers appear
-					// more vertically centered.
+	y += LABEL_OFFSET_Y;   // Cheat offset to make numbers appear
+	                       // more vertically centered.
 	z = GRID_DELTA_Z + 0.1;
 
 	while (number || draw_zero) {
 
 		digit_x = ((number % 10) / 10.0);
-		draw_zero = FALSE;	// Only draw the Zero once
+		draw_zero = FALSE;                  // Only draw the Zero once
 
 #if !ENABLED_CODE
 // On some builds, when the vertices and mapping coordinates are NOT created,
@@ -99,10 +99,10 @@ void draw_distance_marker(
 // If the bug occurs, it happens on every shot fired.
 // For some reason, the bug is gone without updating neither of my Linux
 // machines, even for older versions of the game.
-	glTexCoord2f( digit_x,     1 );	glVertex3f( quad_x,   y-h/2, z );
-	glTexCoord2f( digit_x+0.1, 1 );	glVertex3f( quad_x+w, y-h/2, z );
-	glTexCoord2f( digit_x+0.1, 0 );	glVertex3f( quad_x+w, y+h/2, z );
-	glTexCoord2f( digit_x,     0 );	glVertex3f( quad_x,   y+h/2, z );
+	glTexCoord2f( digit_x,     1 );  glVertex3f( quad_x,   y-h/2, z );
+	glTexCoord2f( digit_x+0.1, 1 );  glVertex3f( quad_x+w, y-h/2, z );
+	glTexCoord2f( digit_x+0.1, 0 );  glVertex3f( quad_x+w, y+h/2, z );
+	glTexCoord2f( digit_x,     0 );  glVertex3f( quad_x,   y+h/2, z );
 #endif
 		quad_x -= LABEL_QUAD_WIDTH;
 		number /= 10;
@@ -134,21 +134,21 @@ void draw_scene_grid(
 	real_t depth_factor;
 	ship_t* s = &(GS->ship);
 
-	grid_offset_y = -(s->position.y);			// Warp
+	grid_offset_y = -(s->position.y);   // Warp
 	grid_offset_y
 		-= trunc(grid_offset_y / FIELD_STEP_Y / GRID_CELL_SIZE)
 		* FIELD_STEP_Y
 		* GRID_CELL_SIZE
 	;
 
-	glLoadIdentity();					// Reset
+	glLoadIdentity();   // Reset
 	glTranslatef(
 		(s->position.x / SHIP_MAX_X) * CAMERA_OFFSET_X,
 		-offset_y,
 		-camera_distance
 	);
 	glRotatef( camera_rotation, 1,0,0 );
-	glTranslatef(			// Move the field into world
+	glTranslatef(   // Move the field into world
 		-s->position.x,
 		grid_offset_y - offset_y + CAMERA_OFFSET_Y,
 		0.0
@@ -160,7 +160,7 @@ void draw_scene_grid(
 
 	for( y=FIELD_MIN_Y, iy=0 ; y <= FIELD_MAX_Y ; y+=FIELD_STEP_Y, iy++ ) {
 
-		line_position_y			// y-coordinate of this line
+		line_position_y   // y-coordinate of this line
 			= (int)(
 				s->position.y
 				+ grid_offset_y
@@ -182,7 +182,7 @@ void draw_scene_grid(
 		glEnd();
 		glPointSize(
 			(GLfloat)PS->window_width
-			/ 600.0				//...
+			/ 600.0                     //...
 			* depth_factor
 		);
 		glBegin( GL_POINTS );
@@ -211,7 +211,7 @@ void draw_scene_grid(
 #if LINE_MARKERS
 			if (line_position_y % 100 == 0) {
 	#if LINE_LABELS
-				glEnd();	// Points
+				glEnd();   // Points
 
 				draw_distance_marker(
 					PS,
@@ -239,7 +239,7 @@ void draw_scene_grid(
 				* (line_position_y - GS->black_hole.position.y)
 			);
 
-			if (distance != 0) {	// Function describing the hole
+			if (distance != 0) {   // Function describing the hole
 				z = -25000 / (distance*distance);
 			}
 
@@ -288,9 +288,8 @@ void draw_scene_ship(
 	);
 	glRotatef( camera_rotation, 1,0,0 );
 	glTranslatef(
-		0,
-					// Move ship into world position
-		-offset_y + CAMERA_OFFSET_Y,	// Move down on screen
+		0,                             // Move ship into world position
+		-offset_y + CAMERA_OFFSET_Y,   // Move down on screen
 		0
 	);
 
@@ -308,7 +307,7 @@ void draw_scene_ship(
 
 		//... Animate roll per timer
 
-		glRotatef(       s->velocity.x*10,  0,1,0 );	// Roll (fdw axis)
+		glRotatef(       s->velocity.x*10,  0,1,0 );   // Roll (fdw axis)
 
 #if FIRE_DIAGONALLY
 		glRotatef(       s->velocity.x*5,   0,0,-1 );
@@ -358,7 +357,7 @@ void draw_scene_ship(
 
 		glEnd();
 
-		//glPopMatrix();		// Undo roll
+		//glPopMatrix();   // Undo roll
 	}
 
 	// Draw Shields
@@ -391,7 +390,7 @@ void draw_scene_ship(
 		}
 	}
 
-	glPopMatrix();		// Undo roll
+	glPopMatrix();          // Undo roll
 	glDisable( GL_BLEND );
 }
 
@@ -411,7 +410,7 @@ void draw_scene_enemies( program_state_t* PS, game_state_t* GS )
 
 	const real_t h = sqrt(0.75);
 	real_t h2;
-	real_t Fs;				// Size factor
+	real_t Fs;                     // Size factor
 
 	enemy_t* e;
 
@@ -551,7 +550,7 @@ void draw_scene_lasers( program_state_t* PS, game_state_t* GS )
 				/ (FIELD_HEIGHT/2)
 			;
 
-			if (l->owner < 0) {	// Player
+			if (l->owner < 0) {   // Player
 				glColor3f( 0, depth_factor, 0 );
 			}
 			else {
@@ -560,7 +559,7 @@ void draw_scene_lasers( program_state_t* PS, game_state_t* GS )
 
 			glLineWidth(
 				(GLfloat)PS->window_width
-				/ 256.0				//...
+				/ 256.0                     //...
 				* depth_factor
 			);
 
@@ -677,7 +676,7 @@ void draw_scene_explosion(
 
 #if COLORED_EXPLOSIONS
 #ifdef DISABLED_CODE
-			radius		// Repurposing radius
+			radius          // Repurposing radius
 				= 1.0
 				- (1-radius)*(1-radius)
 			;
@@ -765,7 +764,7 @@ void draw_scene_bonus_bubbles( program_state_t* PS, game_state_t* GS )
 				if (time_left_us < 333000) {
 					set_color(
 						1,1,1,
-						1.0,		// Intensity
+						1.0,               // Intensity
 						depth_factor,
 						FALSE
 					);
@@ -850,41 +849,41 @@ void draw_scene_bonus_bubbles( program_state_t* PS, game_state_t* GS )
  */
 void draw_scene_blackhole_darkness( program_state_t* PS, game_state_t* GS )
 {
-        GLfloat darkness_factor
-                = 1.0 - fmin(
-                        1.0,
-                        GS->ship.distance_to_black_hole
-                        / BLACK_HOLE_RADIUS_DARKNESS
-                )
-        ;
-        darkness_factor = sqrt( darkness_factor );
-        if ((PS->run_mode & (RM_AFTER_LIFE | RM_MAIN_MENU))
-        && (GS->ship.distance_to_black_hole <= BLACK_HOLE_RADIUS_DARKNESS))
-        {
+	GLfloat darkness_factor
+		= 1.0 - fmin(
+			1.0,
+			GS->ship.distance_to_black_hole
+			/ BLACK_HOLE_RADIUS_DARKNESS
+		)
+	;
+	darkness_factor = sqrt( darkness_factor );
+	if ((PS->run_mode & (RM_AFTER_LIFE | RM_MAIN_MENU))
+	&& (GS->ship.distance_to_black_hole <= BLACK_HOLE_RADIUS_DARKNESS))
+	{
 		darkness_factor = 1.0;
 	}
 
-        glMatrixMode( GL_PROJECTION );          // Setup 2D mode
-        glLoadIdentity();
-        gluOrtho2D(
-                0, PS->window_width,            // Let coordinates match..
-                0, PS->window_height            // ..screen resolution
-        );
-        glMatrixMode( GL_MODELVIEW );
-        glDisable( GL_DEPTH_TEST );
+	glMatrixMode( GL_PROJECTION );          // Setup 2D mode
+	glLoadIdentity();
+	gluOrtho2D(
+		0, PS->window_width,            // Let coordinates match..
+		0, PS->window_height            // ..screen resolution
+	);
+	glMatrixMode( GL_MODELVIEW );
+	glDisable( GL_DEPTH_TEST );
 
-        glLoadIdentity();
+	glLoadIdentity();
 
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );    //... Does this
-        glColor4f( 0,0,0, darkness_factor );                    // work on many
-        glBegin( GL_QUADS );                                    // computers?
-                glVertex2i( 0, 0 );
-                glVertex2i( 0, PS->window_height );
-                glVertex2i( PS->window_width, PS->window_height );
-                glVertex2i( PS->window_width, 0 );
-        glEnd();
-        glDisable( GL_BLEND );
+	glEnable( GL_BLEND );
+	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );    //... Does this
+	glColor4f( 0,0,0, darkness_factor );                    // work on many
+	glBegin( GL_QUADS );                                    // computers?
+		glVertex2i( 0, 0 );
+		glVertex2i( 0, PS->window_height );
+		glVertex2i( PS->window_width, PS->window_height );
+		glVertex2i( PS->window_width, 0 );
+	glEnd();
+	glDisable( GL_BLEND );
 }
 #endif
 
@@ -898,7 +897,7 @@ void show_background_image( program_state_t* PS, game_state_t* GS )
 	const int bi = BACKGROUND_INTENSITY;
 	GLfloat x, y;
 
-	glMatrixMode( GL_PROJECTION );		// Setup 2D mode
+	glMatrixMode( GL_PROJECTION );          // Setup 2D mode
 	glLoadIdentity();
 	gluOrtho2D( 0, w, 0, h );
 	glMatrixMode( GL_MODELVIEW );
@@ -912,15 +911,15 @@ void show_background_image( program_state_t* PS, game_state_t* GS )
 	// Calculate offset for the texture
 	x = GS->ship.position.x / PS->window_width;
 
-	y	= GS->ship.camera_speed_pitch	// How much to move up/down
-		/ -7.0				// Fraction of screen height
+	y	= GS->ship.camera_speed_pitch   // How much to move up/down
+		/ -7.0                          // Fraction of screen height
 	;
 
 	glBegin( GL_QUADS );
-		glTexCoord2f( x+0, y+0 );	glVertex2i( 0, h );
-		glTexCoord2f( x+1, y+0 );	glVertex2i( w, h );
-		glTexCoord2f( x+1, y+1 );	glVertex2i( w, 0 );
-		glTexCoord2f( x+0, y+1 );	glVertex2i( 0, 0 );
+		glTexCoord2f( x+0, y+0 );  glVertex2i( 0, h );
+		glTexCoord2f( x+1, y+0 );  glVertex2i( w, h );
+		glTexCoord2f( x+1, y+1 );  glVertex2i( w, 0 );
+		glTexCoord2f( x+0, y+1 );  glVertex2i( 0, 0 );
 	glEnd();
 
 	glDisable( GL_TEXTURE_2D );
@@ -931,9 +930,9 @@ void show_background_image( program_state_t* PS, game_state_t* GS )
  */
 void draw_scene( program_state_t* PS, game_state_t* GS )
 {
-	real_t offset_y				// Adjust y-position of..
-		= GS->ship.camera_speed_pitch	// ..the ship in respect..
-		* CAMERA_PITCH_OFFSET_Y		// ..to current speed
+	real_t offset_y                         // Adjust y-position of..
+		= GS->ship.camera_speed_pitch   // ..the ship in respect..
+		* CAMERA_PITCH_OFFSET_Y         // ..to current speed
 	;
 
 	real_t camera_distance
@@ -945,7 +944,7 @@ void draw_scene( program_state_t* PS, game_state_t* GS )
 	real_t camera_rotation
 		= GS->camera.angle
 		+ GS->ship.camera_speed_pitch
-		* CAMERA_ROTATION_ROLL_FACTOR	// degrees
+		* CAMERA_ROTATION_ROLL_FACTOR   // degrees
 	;
 
 	/* Drawing the grid and the ship need almost the same transformations,
@@ -957,9 +956,9 @@ void draw_scene( program_state_t* PS, game_state_t* GS )
 	// The ship routine creates new transformations
 	draw_scene_ship( PS, GS, camera_distance, camera_rotation, offset_y );
 
-	glTranslatef(			// Other objects need to be displayed..
-		-GS->ship.position.x,	// ..in a position relative to the..
-		-GS->ship.position.y,	// ..player's ship
+	glTranslatef(                   // Other objects need to be displayed..
+		-GS->ship.position.x,   // ..in a position relative to the..
+		-GS->ship.position.y,   // ..player's ship
 		-GS->ship.position.z
 	);
 
@@ -997,8 +996,8 @@ void draw_game_frame( program_state_t* PS, game_state_t* GS )
 
 	glViewport( 0, 0, w, h );
 
-	glClearColor( 0.0, 0.0, 0.05, 0.0 );	// Background blue and opaque
-	glClearDepth( 1.0 );			// Background depth to farthest
+	glClearColor( 0.0, 0.0, 0.05, 0.0 );    // Background blue and opaque
+	glClearDepth( 1.0 );                    // Background depth to farthest
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
 #if SHOW_BACKGROUND
@@ -1006,37 +1005,37 @@ void draw_game_frame( program_state_t* PS, game_state_t* GS )
 #endif
 
 	// Draw the 3D scene
-	glMatrixMode( GL_PROJECTION );		// Setup perspective mode
+	glMatrixMode( GL_PROJECTION );          // Setup perspective mode
 	glLoadIdentity();
 	gluPerspective(
-		45.0f,				// fovy   Field of View, y-Axis
-		aspect,				// Aspect ratio of the screen
-		0.1f,				// zNear
-		30000.0f			// zFar
+		45.0f,                          // fovy   Field of View, y-Axis
+		aspect,                         // Aspect ratio of the screen
+		0.1f,                           // zNear
+		30000.0f                        // zFar
 	);
 
 	glMatrixMode( GL_MODELVIEW );
 	glEnable( GL_DEPTH_TEST );
 	glDepthFunc( GL_LESS );
 
-	glEnable( GL_BLEND );			// Enabling blending for..
+	glEnable( GL_BLEND );                   // Enabling blending for..
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-	glEnable( GL_POINT_SMOOTH );		// ..anti-aliasing.
+	glEnable( GL_POINT_SMOOTH );            // ..anti-aliasing.
 	glEnable( GL_LINE_SMOOTH );
-	//glEnable( GL_POLYGON_SMOOTH );	//... looks like polygon antialiasing isn't that simple
+	//glEnable( GL_POLYGON_SMOOTH )         //... looks like polygon antialiasing isn't that simple
 
 	glHint( GL_POINT_SMOOTH_HINT, GL_NICEST );
 	glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
 	//glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
 
-	draw_scene( PS, GS );			// Draw the world
+	draw_scene( PS, GS );                   // Draw the world
 
 	glDisable( GL_POINT_SMOOTH );
 	glDisable( GL_LINE_SMOOTH );
 	//glDisable( GL_POLYGON_SMOOTH );
 	glDisable( GL_BLEND );
 
-	draw_hud( PS, GS );			// Draw the overlay
+	draw_hud( PS, GS );                     // Draw the overlay
 }
 
 //EOF

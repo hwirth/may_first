@@ -64,7 +64,7 @@ void init_sound( program_state_t* PS, game_state_t* GS )
 		error_quit( "Mix_OpenAudio() returned NULL" );
 	}
 
-	snd->laser  = NULL;	//... do I really need these initializations?
+	snd->laser  = NULL;   //... do I really need these initializations?
 	snd->hit    = NULL;
 	snd->punch  = NULL;
 	snd->blast  = NULL;
@@ -207,7 +207,7 @@ void hide_cursor( void )
 	int x, y;
 
 	SDL_GetMouseState( &x, &y );
-	SDL_WarpMouse( x, y );	//...what for is this needed anyways?
+	SDL_WarpMouse( x, y );   //...what for is this needed anyways?
 #endif
 	SDL_ShowCursor( SDL_DISABLE );
 }
@@ -218,7 +218,7 @@ void show_cursor( void )
 	int x, y;
 
 	SDL_GetMouseState( &x, &y );
-	SDL_WarpMouse( x, y );	//...what for is this needed anyways?
+	SDL_WarpMouse( x, y );   //...what for is this needed anyways?
 #endif
 	SDL_ShowCursor( SDL_ENABLE );
 
@@ -264,8 +264,8 @@ void do_RESIZE( program_state_t* PS )
 void toggle_full_screen( program_state_t* PS )
 {
 #ifdef FULLSCREEN_WORKS_WITH_OPENGL
-	uint32_t old_flags = PS->screen_flags;	// Save the current flags..
-						// ..in case toggling fails
+	uint32_t old_flags = PS->screen_flags;   // Save the current flags..
+	                                         // ..in case toggling fails
 	int w, h;
 
 	if (PS->screen_flags & SDL_FULLSCREEN) {
@@ -297,7 +297,7 @@ void toggle_full_screen( program_state_t* PS )
 #endif
 }
 
-void test( program_state_t* PS, game_state_t* GS )	//...
+void test( program_state_t* PS, game_state_t* GS )   //...
 {
 	int i, j;
 	formation_t* f = &(GS->formations[0]);
@@ -322,14 +322,21 @@ void test( program_state_t* PS, game_state_t* GS )	//...
 	}
 }
 
-SDL_Surface* flipVert( SDL_Surface* sfc )
-{
-	// taken from:
-	// http://content.gpwiki.org/index.php/OpenGL:Tutorials:Taking_a_Screenshot
 
-	SDL_Surface* result = SDL_CreateRGBSurface( sfc->flags, sfc->w, sfc->h,
-		sfc->format->BytesPerPixel * 8, sfc->format->Rmask, sfc->format->Gmask,
-		sfc->format->Bmask, sfc->format->Amask );
+// http://content.gpwiki.org/index.php/OpenGL:Tutorials:Taking_a_Screenshot
+SDL_Surface* flip_vert( SDL_Surface* sfc )
+{
+
+	SDL_Surface* result = SDL_CreateRGBSurface(
+		sfc->flags,
+		sfc->w,
+		sfc->h,
+		sfc->format->BytesPerPixel * 8,
+		sfc->format->Rmask,
+		sfc->format->Gmask,
+		sfc->format->Bmask,
+		sfc->format->Amask
+	);
 	if (result == NULL) return NULL;
 
 	Uint8* pixels = (Uint8*) sfc->pixels;
@@ -346,18 +353,35 @@ SDL_Surface* flipVert( SDL_Surface* sfc )
 	return result;
 }
 
-void create_screenshot( program_state_t* PS, game_state_t* GS ) {
-	// taken from:
-	// http://content.gpwiki.org/index.php/OpenGL:Tutorials:Taking_a_Screenshot
+/**
+ * create_screenshot()
+ * http://content.gpwiki.org/index.php/OpenGL:Tutorials:Taking_a_Screenshot
+ */
+void create_screenshot( program_state_t* PS, game_state_t* GS )
+{
+	SDL_Surface* surface = SDL_CreateRGBSurface(
+		SDL_SWSURFACE, PS->window_width,
+		PS->window_height,
+		24,
+		0x000000FF,
+		0x0000FF00,
+		0x00FF0000,
+		0
+	);
 
-	SDL_Surface * surf = SDL_CreateRGBSurface( SDL_SWSURFACE, PS->window_width, PS->window_height, 24, 0x000000FF, 0x0000FF00, 0x00FF0000, 0 );
-	if (surf == NULL) return;
+	if (surface == NULL) return;
 
-	glReadPixels( 0, 0, PS->window_width, PS->window_height, GL_RGB, GL_UNSIGNED_BYTE, surf->pixels );
+	glReadPixels(
+		0, 0,
+		PS->window_width, PS->window_height,
+		GL_RGB,
+		GL_UNSIGNED_BYTE,
+		surface->pixels
+	);
 
-	SDL_Surface * flip = flipVert( surf );
+	SDL_Surface* flip = flip_vert( surface );
 	if (flip == NULL) return;
-	SDL_FreeSurface( surf );
+	SDL_FreeSurface( surface );
 
 	time_t rawtime;
 	struct tm *ltime;
@@ -366,61 +390,70 @@ void create_screenshot( program_state_t* PS, game_state_t* GS ) {
 	ltime = localtime( &rawtime );
 
 	char *screenshot_name;
-	asprintf( &screenshot_name, "screenshot_%4d_%02d_%02d-%02d.%02d.%02d.bmp",
-			ltime->tm_year + 1900,
-			ltime->tm_mon,
-			ltime->tm_mday,
-			ltime->tm_hour,
-			ltime->tm_min,
-			ltime->tm_sec);
+	asprintf(
+		&screenshot_name,
+		"screenshot_%4d_%02d_%02d-%02d.%02d.%02d.bmp",
+		ltime->tm_year + 1900,
+		ltime->tm_mon,
+		ltime->tm_mday,
+		ltime->tm_hour,
+		ltime->tm_min,
+		ltime->tm_sec
+	);
 
 	SDL_SaveBMP( flip, screenshot_name );
 
 	free( screenshot_name );
 	SDL_FreeSurface( flip );
-}
+
+} // create_screenshot
+
 
 void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 {
 	switch (ksym) {
 
-	case SDLK_PRINT:	create_screenshot( PS, GS );		break;
-	case SDLK_a:						// fall through
-	case SDLK_j:						// fall through
-	case SDLK_LEFT:		start_move( PS, GS, LEFT );		break;
-	case SDLK_d:						// fall through
-	case SDLK_l:						// fall through
-	case SDLK_RIGHT:	start_move( PS, GS, RIGHT );		break;
-	case SDLK_w:						// fall through
-	case SDLK_i:						// fall through
-	case SDLK_UP:		start_move( PS, GS, FORWARD );		break;
-	case SDLK_s:						// fall through
-	case SDLK_k:						// fall through
-	case SDLK_DOWN:		start_move( PS, GS, BACK );		break;
+	case SDLK_PRINT:        create_screenshot( PS, GS );    break;
+	case SDLK_a:                                            // fall through
+	case SDLK_j:                                            // fall through
+	case SDLK_LEFT:         start_move( PS, GS, LEFT );     break;
+	case SDLK_d:                                            // fall through
+	case SDLK_l:                                            // fall through
+	case SDLK_RIGHT:        start_move( PS, GS, RIGHT );    break;
+	case SDLK_w:                                            // fall through
+	case SDLK_i:                                            // fall through
+	case SDLK_UP:           start_move( PS, GS, FORWARD );  break;
+	case SDLK_s:                                            // fall through
+	case SDLK_k:                                            // fall through
+	case SDLK_DOWN:         start_move( PS, GS, BACK );     break;
 #if DEBUG
-	case SDLK_x:		remove_all_objects( GS );		break;
+	case SDLK_x:            remove_all_objects( GS );       break;
 #endif
-	case SDLK_m:		toggle_music();				break;
-	case SDLK_r:		reset_game( PS, GS );			break;
-	case SDLK_t:		test( PS, GS );				break;
-	case SDLK_PLUS:		volume_up  ( PS, VOLUME_ALL );		break;
-	case SDLK_MINUS:	volume_down( PS, VOLUME_ALL );		break;
-	case SDLK_INSERT:					// fall through
-	case SDLK_KP_PLUS:	volume_up  ( PS, VOLUME_FX );		break;
-	case SDLK_DELETE:					// fall through
-	case SDLK_KP_MINUS:	volume_down( PS, VOLUME_FX );		break;
-	case SDLK_KP_MULTIPLY:	volume_up  ( PS, VOLUME_MUSIC );	break;
-	case SDLK_KP_DIVIDE:	volume_down( PS, VOLUME_MUSIC );	break;
-	case SDLK_COMMA:					// fall through
-	case SDLK_RCTRL:					// fall through
+	case SDLK_m:            toggle_music();                 break;
+	case SDLK_r:            reset_game( PS, GS );           break;
+	case SDLK_t:            test( PS, GS );                 break;
+	case SDLK_PLUS:         volume_up  ( PS, VOLUME_ALL );  break;
+	case SDLK_MINUS:        volume_down( PS, VOLUME_ALL );  break;
+	case SDLK_INSERT:                                       // fall through
+	case SDLK_8:
+	case SDLK_KP_PLUS:      volume_up  ( PS, VOLUME_FX );   break;
+	case SDLK_DELETE:                                       // fall through
+	case SDLK_7:
+	case SDLK_KP_MINUS:     volume_down( PS, VOLUME_FX );   break;
+	case SDLK_0:
+	case SDLK_KP_MULTIPLY:  volume_up  ( PS, VOLUME_MUSIC );break;
+	case SDLK_9:
+	case SDLK_KP_DIVIDE:    volume_down( PS, VOLUME_MUSIC );break;
+	case SDLK_COMMA:                                        // fall through
+	case SDLK_RCTRL:                                        // fall through
 	case SDLK_LCTRL:
 		if (PS->run_mode == RM_RUNNING) {
 			start_fire( PS, GS, WEAPON_LASER_1, FM_SINGLE );
 		}
 		break;
-	case SDLK_PERIOD:					// fall through
-	case SDLK_RSHIFT:					// fall through
-	case SDLK_LSHIFT:					// fall through
+	case SDLK_PERIOD:                                       // fall through
+	case SDLK_RSHIFT:                                       // fall through
+	case SDLK_LSHIFT:                                       // fall through
 	case SDLK_LSUPER:
 		if (PS->run_mode == RM_RUNNING) {
 
@@ -429,13 +462,13 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 			start_fire( PS, GS, WEAPON_LASER_2, FM_SINGLE );
 		}
 		break;
-	case SDLK_RALT:						// fall through
+	case SDLK_RALT:                                         // fall through
 	case SDLK_LALT:
 		if (PS->run_mode == RM_RUNNING) {
 			start_round_shot( PS, GS, FM_SINGLE );
 		}
 		break;
-	case SDLK_RETURN:					// fall through
+	case SDLK_RETURN:                                       // fall through
 	case SDLK_SPACE:
 		if (PS->run_mode & (RM_INTRO | RM_MAIN_MENU | RM_AFTER_LIFE)) {
 			reset_game( PS, GS );
@@ -446,17 +479,23 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 		break;
 
 	case SDLK_ESCAPE:
+#if DISABLED_CODE
 		switch (PS->run_mode) {
 			case RM_INTRO:
 			case RM_PAUSE:
-			case RM_MAIN_MENU:	do_QUIT( PS );
+			case RM_MAIN_MENU:  do_QUIT( PS );
 		}
-								// fall through
-	case SDLK_p:						// fall through
-	case SDLK_PAUSE:	toggle_pause( PS );			break;
-	case SDLK_F3:		PS->debug = !PS->debug;			break;
-	case SDLK_F11:		toggle_full_screen( PS );		break;
-	case SDLK_F12:		error_quit("User abort [F12]");		break;
+#else
+		if (PS->run_mode & (RM_INTRO | RM_PAUSE | RM_MAIN_MENU)) {
+			do_QUIT( PS );
+		}
+#endif
+	                                                        // fall through
+	case SDLK_p:                                            // fall through
+	case SDLK_PAUSE:  toggle_pause( PS );                   break;
+	case SDLK_F3:     PS->debug = !PS->debug;               break;
+	case SDLK_F11:    toggle_full_screen( PS );             break;
+	case SDLK_F12:    error_quit("User abort [F12]");       break;
 
 	} // case
 
@@ -466,18 +505,18 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 void handle_keyup( program_state_t* PS, game_state_t* GS, int ksym )
 {
 	switch (ksym) {
-		case SDLK_a:					// fall through
-		case SDLK_j:					// fall through
-		case SDLK_LEFT:		stop_move( PS, GS, LEFT );	break;
-		case SDLK_d:					// fall through
-		case SDLK_l:					// fall through
-		case SDLK_RIGHT:	stop_move( PS, GS, RIGHT );	break;
-		case SDLK_w:					// fall through
-		case SDLK_i:					// fall through
-		case SDLK_UP:		stop_move( PS, GS, FORWARD );	break;
-		case SDLK_s:					// fall through
-		case SDLK_k:					// fall through
-		case SDLK_DOWN:		stop_move( PS, GS, BACK );	break;
+		case SDLK_a:                                    // fall through
+		case SDLK_j:                                    // fall through
+		case SDLK_LEFT:   stop_move( PS, GS, LEFT );    break;
+		case SDLK_d:                                    // fall through
+		case SDLK_l:                                    // fall through
+		case SDLK_RIGHT:  stop_move( PS, GS, RIGHT );   break;
+		case SDLK_w:                                    // fall through
+		case SDLK_i:                                    // fall through
+		case SDLK_UP:     stop_move( PS, GS, FORWARD );  break;
+		case SDLK_s:                                    // fall through
+		case SDLK_k:                                    // fall through
+		case SDLK_DOWN:   stop_move( PS, GS, BACK );    break;
 	}
 
 } // handle_keyup
@@ -512,28 +551,28 @@ void process_event_queue( program_state_t* PS, game_state_t* GS )
 
 	uint8_t *keystates = SDL_GetKeyState( NULL );
 
-	handle_mouse( PS );	// Update internal mouse coordinates
+	handle_mouse( PS );   // Update internal mouse coordinates
 
 	// Auto-Fire
 	if (PS->run_mode == RM_RUNNING) {
 
-		if (	keystates[SDLK_LCTRL]
-		||	keystates[SDLK_RCTRL]
-		||	keystates[SDLK_COMMA]
+		if( keystates[SDLK_LCTRL]
+		||  keystates[SDLK_RCTRL]
+		||  keystates[SDLK_COMMA]
 		) {
 			continue_fire( PS, GS, WEAPON_LASER_1 );
 		}
 
-		if (	keystates[SDLK_LSHIFT]
-		||	keystates[SDLK_LSUPER]
-		||	keystates[SDLK_RSHIFT]
-		||	keystates[SDLK_RALT]
+		if( keystates[SDLK_LSHIFT]
+		||  keystates[SDLK_LSUPER]
+		||  keystates[SDLK_RSHIFT]
+		||  keystates[SDLK_RALT]
 		) {
 			continue_fire( PS, GS, WEAPON_LASER_2 );
 		}
 
-		if (	keystates[SDLK_LALT]
-		||	keystates[SDLK_RALT]
+		if( keystates[SDLK_LALT]
+		||  keystates[SDLK_RALT]
 		) {
 			continue_fire( PS, GS, WEAPON_ROUNDSHOT );
 		}
@@ -550,8 +589,8 @@ void process_event_queue( program_state_t* PS, game_state_t* GS )
 				break;
 
 			case SDL_ACTIVEEVENT:
-				if ((event.active.gain != 1)
-				&& (PS->run_mode == RM_RUNNING)
+				if( (event.active.gain != 1)
+				&&  (PS->run_mode == RM_RUNNING)
 				) {
 					// Pause game, when the window..
 					// ..looses input focus

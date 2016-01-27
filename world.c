@@ -20,13 +20,13 @@
  * game world, like lasers, enemies, etc. Used by  reset_game() .
 
  * See also
- * 	world.c
- * 	add_laser_beam
- * 	add_explosion
- * 	add_bonus_bubble
+ *  world.c
+ *  add_laser_beam
+ *  add_explosion
+ *  add_bonus_bubble
  *
- * 	level_design.c
- * 	add_random_enemy
+ *  level_design.c
+ *  add_random_enemy
  *
  * and their corresponding remove functions.
  */
@@ -85,23 +85,23 @@ void disable_weapons( game_state_t* GS )
  * Creates a new entry in  laser_beams[] , setting a new beam en route.
  */
 void add_laser_beam(
-	game_state_t* GS,	// All game related data
-	int new_owner,		// Who fired this beam? If < 0, it was the
-				// player, the number indicates the mode
-				// (Single, dual, round shot).
-	vector_t new_position,	// From where
-	vector_t new_velocity,	// In which direction
-	real_t new_speed_bonus	// At which speed did the player fire?
-				// (A kill will result in less Resource gain,
-				// when fired at slow speed)
+	game_state_t* GS,        // All game related data
+	int new_owner,           // Who fired this beam? If < 0, it was the
+	                         // player, the number indicates the mode
+	                         // (Single, dual, round shot).
+	vector_t new_position,   // From where
+	vector_t new_velocity,   // In which direction
+	real_t new_speed_bonus   // At which speed did the player fire?
+	                         // (A kill will result in less Resource gain,
+	                         // when fired at slow speed)
 ) {
 	int i;
 	laser_beam_t* l;
 
 	if (new_owner >= 0) {
 		//...GS->enemies[new_owner].tier ... Aim!
-	}
-	else {	// The player initiated this shot
+	} else {
+		// The player initiated this shot
 		new_velocity.y += GS->ship.velocity.y;
 		++GS->shots_en_route;
 	}
@@ -121,8 +121,8 @@ void add_laser_beam(
 			l->active = TRUE;
 			GS->nr_active_lasers++;
 
-			if (new_owner < 0) {		// Player?
-				GS->shots_fired++;	// Count this shot
+			if (new_owner < 0) {         // Player?
+				GS->shots_fired++;   // Count this shot
 			}
 
 			return;
@@ -137,7 +137,7 @@ void remove_laser_beam( game_state_t* GS, laser_beam_t* l )
 	l->active = FALSE;
 	GS->nr_active_lasers--;
 
-	if (l->owner < 0) {	// The player initiated this shot
+	if (l->owner < 0) {   // The player initiated this shot
 		--GS->shots_en_route;
 	}
 }
@@ -204,7 +204,7 @@ void add_bonus_bubble(
 			b->resource = new_resource;
 			b->tier     = new_tier;
 
-			b->start_time_us = PS->game_time_us;	//...check other objects for using current_time_us
+			b->start_time_us = PS->game_time_us;   //...check other objects for using current_time_us
 
 			b->active = TRUE;
 			GS->nr_active_bonus_bubbles_total++;
@@ -256,9 +256,9 @@ bool_t detect_collision(
 	//...Mathias' solution appears to ignore some hits (1 of 100 or so)
 
 	/* Mathias' Solution
-	 * x0 = px0 + vx0 * t,	x1 = px1 + vx1 * t
-	 * y0 = py0 + vy0 * t,	y1 = py1 + vy1 * t
-	 * z0 = pz0 + vz0 * t,	z1 = pz1 + vz1 * t
+	 * x0 = px0 + vx0 * t,  x1 = px1 + vx1 * t
+	 * y0 = py0 + vy0 * t,  y1 = py1 + vy1 * t
+	 * z0 = pz0 + vz0 * t,  z1 = pz1 + vz1 * t
 	 *
 	 * (x0-x1)^2 + (y0-y1)^2 + (z0 - z1)^2 = r^2
 	 *
@@ -290,7 +290,7 @@ bool_t detect_collision(
 		//real_t t1 = -B - sqrt( B*B - 4*A*C );
 		//real_t t = (t0 + t1) / 2;
 
-		real_t Tmid = -B / (2*A);	// Time of nearest approach
+		real_t Tmid = -B / (2*A);   // Time of nearest approach
 
 		return (Tmid <= tick_fraction_s);
 	}
@@ -431,14 +431,14 @@ void advance_laser_beam(
 #if TIER2_HOMING
 	vector_t v;
 
-	if (GS->enemies[ l->owner ].tier == TIER_2) {	// Homing
+	if (GS->enemies[ l->owner ].tier == TIER_2) {   // Homing
 		v = unity_vector( subtract_vector(s->position, l->position) );
 		v.x *= 1.0;
 		v.y *= 1.0;
 		v.z = 0;
 		l->position = add_vector( l->position, v );
 	}
-	else {	// Normal LASER beam
+	else {   // Normal LASER beam
 #endif
 		l->position.x += l->velocity.x * PS->tick_fraction_s;
 		l->position.z += l->velocity.z * PS->tick_fraction_s;
@@ -446,7 +446,7 @@ void advance_laser_beam(
 		if (l->owner < 0) {
 			l->position.y += l->velocity.y * PS->tick_fraction_s;
 		}
-		else {	// Enemy
+		else {   // Enemy
 			l->position.y
 				+= (0.4 + (real_t)GS->current_level / 10.0)
 				* l->velocity.y
@@ -458,13 +458,13 @@ void advance_laser_beam(
 #endif
 
 	// Beam leaving the game area?
-	if (	(l->position.y > l->decay_beyond_y)
-	||	(l->position.y - s->position.y < -FIELD_HEIGHT/2)//...
-	||	(l->position.y - s->position.y > +FIELD_HEIGHT/2)//...
-	||	(l->position.x < FIELD_MIN_X)
-	||	(l->position.x > FIELD_MAX_X)
+	if( (l->position.y > l->decay_beyond_y)
+	||  (l->position.y - s->position.y < -FIELD_HEIGHT/2)//...
+	||  (l->position.y - s->position.y > +FIELD_HEIGHT/2)//...
+	||  (l->position.x < FIELD_MIN_X)
+	||  (l->position.x > FIELD_MAX_X)
 	) {
-		if (l->owner < 0) {	// Player
+		if (l->owner < 0) {   // Player
 			GS->shots_missed++;
 		}
 		remove_laser_beam( GS, l );
@@ -472,7 +472,7 @@ void advance_laser_beam(
 	}
 
 	// hitting player's ship?
-	if(TRUE){//... (l->owner >= 0) {	// No self-kills
+	if(TRUE){//... (l->owner >= 0) {   // No self-kills
 
 		if (detect_collision(
 			PS->tick_fraction_s,
@@ -492,7 +492,7 @@ void advance_laser_beam(
 
 		e = &(GS->enemies[i]);
 
-		if ((e->active) && (l->owner != i)) {	// No self-kills
+		if ((e->active) && (l->owner != i)) {   // No self-kills
 
 			if (detect_collision(
 				PS->tick_fraction_s,
@@ -731,11 +731,11 @@ void advance_simulation( program_state_t* PS, game_state_t* GS )
 			> AFTER_LIFE_DURATION_US)
 		{
 			PS->run_mode = RM_MAIN_MENU;
-			PS->main_menu_since_us	= PS->current_time_us;
+			PS->main_menu_since_us  = PS->current_time_us;
 
 			// Make the following look nice in debug info
-			PS->game_start_us	=
-			PS->pause_since_us	= PS->program_start_us - 1;
+			PS->game_start_us       =
+			PS->pause_since_us      = PS->program_start_us - 1;
 		}
 		break;
 
@@ -755,11 +755,11 @@ void advance_simulation( program_state_t* PS, game_state_t* GS )
 			player_warped_around( GS );
 		}
 
-		simulate_enemy_ai( PS, GS );	// Let them think and decide
-						// (Mainly firing, aiming)
+		simulate_enemy_ai( PS, GS );    // Let them think and decide
+		                                // (Mainly firing, aiming)
 		advance_ship( PS, GS );
-		advance_enemies( PS, GS );	// Actually move the objects..
-		advance_laser_beams( PS, GS );	// ..and collision detection
+		advance_enemies( PS, GS );      // Actually move the objects..
+		advance_laser_beams( PS, GS );  // ..and collision detection
 		advance_bonus_bubbles( PS, GS );
 		advance_black_hole( PS, GS );
 

@@ -232,6 +232,7 @@ BUGS:
 ! Licensed media files only
 ! Fix background image (is not properly "endless", also copyright)
 ! Use correct BPP
+! Fix text size (windowed mode?)
 ~ Rewrite: scene.c: Proper OpenGL usage
 ~ Improve: Multiple sounds played at the same time --> not all played.
 > Full documentation

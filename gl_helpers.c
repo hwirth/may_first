@@ -24,11 +24,11 @@ void log_opengl_errors( void )
 
 void setup_gl_2D( int window_width, int window_height )
 {
-	glMatrixMode( GL_PROJECTION );		// Setup 2D mode
+	glMatrixMode( GL_PROJECTION );   // Setup 2D mode
 	glLoadIdentity();
 	gluOrtho2D(
-		0, window_width,		// Let coordinates match..
-		0, window_height		// ..screen resolution
+		0, window_width,         // Let coordinates match..
+		0, window_height         // ..screen resolution
 	);
 	glMatrixMode( GL_MODELVIEW );
 	glDisable( GL_DEPTH_TEST );
@@ -38,32 +38,32 @@ void color_from_hue( GLfloat hue, GLfloat* R, GLfloat* G, GLfloat* B )
 {
 	GLfloat part = (6.0*hue - floor(6.0 * hue));
 
-	if (hue < 1.0/6.0) {	// Red --> Yellow
+	if (hue < 1.0/6.0) {             // Red --> Yellow
 		*R = 1;
 		*G = part;
 		*B = 0;
 	}
-	else if (hue < 2.0/6.0) {	// Yellow --> Green
+	else if (hue < 2.0/6.0) {        // Yellow --> Green
 		*R = 1.0 - part;
 		*G = 1;
 		*B = 0;
 	}
-	else if (hue < 3.0/6.0) {	// Green --> Cyan
+	else if (hue < 3.0/6.0) {        // Green --> Cyan
 		*R = 0;
 		*G = 1;
 		*B = part;
 	}
-	else if (hue < 4.0/6.0) {	// Cyan --> Blue
+	else if (hue < 4.0/6.0) {        // Cyan --> Blue
 		*R = 0;
 		*G = 1.0 - part;
 		*B = 1;
 	}
-	else if (hue < 5.0/6.0) {	// Blue --> Magenta
+	else if (hue < 5.0/6.0) {        // Blue --> Magenta
 		*R = part;
 		*G = 0;
 		*B = 1;
 	}
-	else {			// Magenta --> Red
+	else {                           // Magenta --> Red
 		*R = 1;
 		*G = 0;
 		*B = 1.0 - part;
