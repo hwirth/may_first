@@ -15,7 +15,7 @@
 
 // OPTIONS ////////////////////////////////////////////////////////////////////
 
-#define START_IN_FULLSCREEN      (! TRUE)
+#define START_IN_FULLSCREEN      ( TRUE)
 #define PLAY_SOUNDS              TRUE
 #define PLAY_MUSIC               TRUE
 #define PLAY_COMPUTER_VOICE      TRUE

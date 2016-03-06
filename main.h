@@ -155,6 +155,14 @@ struct program_state_s {
 	// OpenGL
 	textures_t textures;                    // Struct holding all textures
 
+	// Joystick
+	SDL_Joystick *joystick;                 // Events will be interpreted
+	                                        // as keyboard input
+	int joyhat;                             // Keeping track of the
+	                                        // coolie-hat position
+	int joyaxis_key[3];                     // Remember which key was
+	                                        // simulated so we can "release"
+	                                        // that key
 	// User interface
 	int window_width;
 	int window_height;

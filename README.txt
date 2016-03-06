@@ -92,6 +92,7 @@ Under Debian 7.1 I had to issue:
 
 Under Fedora 20 I used:
   $ su -c 'yum install  \
+    gcc                 \
     SDL_image-devel     \
     SDL_ttf-devel       \
     SDL_mixer-devel     \
@@ -257,6 +258,8 @@ BUGS:
 ! Warp Button: Jump/Dive and speed forward some distance
 - Several formation layouts, one of them could become a "cluster-ship"
   Nesting of formations?
+- Band transformation only on the horizon, "normalizing" as it approaches
+  the player (cheap solution for the Moebius loop idea)
 
 // TODO v0.2 //////////////////////////////////////////////////////////////////
 ~ Change to tier (1,2,3 instead of 1,3,6)

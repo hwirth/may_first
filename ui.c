@@ -29,6 +29,9 @@ void init_sdl( program_state_t* PS, game_state_t* GS )
 	SDL_Init( SDL_INIT_EVERYTHING );
 	SDL_WM_SetCaption( WINDOW_CAPTION, NULL );
 
+	SDL_JoystickEventState( SDL_ENABLE );
+	PS->joystick = SDL_JoystickOpen( 0 );
+
 #if START_IN_FULLSCREEN
 	const SDL_VideoInfo* info = SDL_GetVideoInfo();
 	w = info->current_w;
@@ -231,6 +234,7 @@ void show_cursor( void )
 
 void do_QUIT( program_state_t* PS ) {
 	PS->run_mode = RM_EXIT;
+	SDL_JoystickClose( PS->joystick );
 }
 
 void do_RESIZE( program_state_t* PS )
@@ -456,9 +460,6 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 	case SDLK_LSHIFT:                                       // fall through
 	case SDLK_LSUPER:
 		if (PS->run_mode == RM_RUNNING) {
-
-
-
 			start_fire( PS, GS, WEAPON_LASER_2, FM_SINGLE );
 		}
 		break;
@@ -522,6 +523,95 @@ void handle_keyup( program_state_t* PS, game_state_t* GS, int ksym )
 } // handle_keyup
 
 
+void handle_joyaxis( program_state_t* PS, game_state_t* GS, int axis, int value )
+{
+	int ksym;
+
+	if ((axis == 1) || (axis == 2)) {
+		if ((value < -3200 ) || (value > 3200)) {   // -32K ... +32K
+			ksym = 0;
+			if (axis == 1) ksym = (value < 0) ? SDLK_UP : SDLK_DOWN ;
+			if (axis == 2) ksym = (value < 0) ? SDLK_LEFT : SDLK_RIGHT ;
+
+			if (PS->joyaxis_key[ axis ] == 0) {
+				handle_keydown( PS, GS, ksym );
+				PS->joyaxis_key[ axis ] = ksym;
+				printf("Pressing %d\n", ksym);
+			}
+		}
+		else {
+			ksym = PS->joyaxis_key[ axis ];
+			if (ksym != 0) {
+				handle_keyup( PS, GS, ksym );
+				printf("Releasing %d\n", ksym);
+			}
+			PS->joyaxis_key[ axis ] = 0;
+		}
+	}
+
+} // handle_joyaxis
+
+
+void handle_joybuttondown( program_state_t* PS, game_state_t* GS, int button )
+{
+	switch (button) {  //... Autofire handled in process_event_queue() 
+		case 0:  handle_keydown( PS, GS, SDLK_LCTRL );   break;
+		case 1:  handle_keydown( PS, GS, SDLK_LSHIFT );  break;
+		case 2:  handle_keydown( PS, GS, SDLK_LALT );    break;
+		case 9:  handle_keydown( PS, GS, SDLK_SPACE );   break;
+	}
+
+} // handle_joybuttondown
+
+
+void handle_joybuttonup( program_state_t* PS, game_state_t* GS, int button )
+{
+	switch (button) {
+		case 0:  handle_keyup( PS, GS, SDLK_UP );     break;
+		case 1:  handle_keyup( PS, GS, SDLK_RIGHT );  break;
+		case 2:  handle_keyup( PS, GS, SDLK_DOWN );   break;
+		case 3:  handle_keyup( PS, GS, SDLK_LEFT );   break;
+	}
+
+} // handle_joybuttonup
+
+
+void handle_joyhatmotion( program_state_t* PS, game_state_t* GS, int positions )
+{
+	if (positions != PS->joyhat) {
+		// Register realease of button(s)
+		if ((PS->joyhat & SDL_HAT_UP) && !(positions & SDL_HAT_UP)) {
+			handle_keyup( PS, GS, SDLK_UP );
+		}
+		if ((PS->joyhat & SDL_HAT_RIGHT) && !(positions & SDL_HAT_RIGHT)) {
+			handle_keyup( PS, GS, SDLK_RIGHT );
+		}
+		if ((PS->joyhat & SDL_HAT_DOWN) && !(positions & SDL_HAT_DOWN)) {
+			handle_keyup( PS, GS, SDLK_DOWN );
+		}
+		if ((PS->joyhat & SDL_HAT_LEFT) && !(positions & SDL_HAT_LEFT)) {
+			handle_keyup( PS, GS, SDLK_LEFT );
+		}
+
+		// Register new button(s)
+		if (!(PS->joyhat & SDL_HAT_UP) && (positions & SDL_HAT_UP)) {
+			handle_keydown( PS, GS, SDLK_UP );
+		}
+		if (!(PS->joyhat & SDL_HAT_RIGHT) && (positions & SDL_HAT_RIGHT)) {
+			handle_keydown( PS, GS, SDLK_RIGHT );
+		}
+		if (!(PS->joyhat & SDL_HAT_DOWN) && (positions & SDL_HAT_DOWN)) {
+			handle_keydown( PS, GS, SDLK_DOWN );
+		}
+		if (!(PS->joyhat & SDL_HAT_LEFT) && (positions & SDL_HAT_LEFT)) {
+			handle_keydown( PS, GS, SDLK_LEFT );
+		}
+
+		PS->joyhat = positions;
+	}
+
+} // handle_joyhatmotion
+
 void handle_mouse( program_state_t* PS )
 {
 	mouse_t* m = &(PS->mouse);
@@ -553,7 +643,7 @@ void process_event_queue( program_state_t* PS, game_state_t* GS )
 
 	handle_mouse( PS );   // Update internal mouse coordinates
 
-	// Auto-Fire
+	// Auto-Fire  //... Move this some better place. It is hard to add AF for the gamepad here.
 	if (PS->run_mode == RM_RUNNING) {
 
 		if( keystates[SDLK_LCTRL]
@@ -604,6 +694,35 @@ void process_event_queue( program_state_t* PS, game_state_t* GS )
 
 			case SDL_KEYUP:
 				handle_keyup( PS, GS, event.key.keysym.sym );
+				break;
+
+			case SDL_JOYBUTTONDOWN:
+				handle_joybuttondown(
+					PS, GS,
+					event.jbutton.button
+				);
+				break;
+
+			case SDL_JOYBUTTONUP:
+				handle_joybuttonup(
+					PS, GS,
+					event.jbutton.button
+				);
+				break;
+
+			case SDL_JOYHATMOTION:
+				handle_joyhatmotion(
+					PS, GS,
+					event.jhat.value
+				);
+				break;
+
+			case SDL_JOYAXISMOTION:
+				handle_joyaxis(
+					PS, GS,
+					event.jaxis.axis,
+					event.jaxis.value
+				);
 				break;
 
 #ifdef DISABLED_CODE
