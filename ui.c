@@ -324,7 +324,19 @@ void test( program_state_t* PS, game_state_t* GS )   //...
 	if (sgn(e->velocity.x) == sgn(e->formation->velocity.x)) {
 		e->velocity.x *= (-1);
 	}
-}
+
+} // test
+
+
+void set_test_status( game_state_t* GS )
+{
+	ship_t* s = &(GS->ship); 
+
+	s->weapons[WEAPON_ROUNDSHOT].enabled = TRUE;
+	GS->current_resource += 1000;
+
+} // set_test_status
+
 
 
 // http://content.gpwiki.org/index.php/OpenGL:Tutorials:Taking_a_Screenshot
@@ -355,7 +367,9 @@ SDL_Surface* flip_vert( SDL_Surface* sfc )
 	}
 
 	return result;
-}
+
+} // flip_vert
+
 
 /**
  * create_screenshot()
@@ -495,6 +509,7 @@ void handle_keydown( program_state_t* PS, game_state_t* GS, int ksym )
 	case SDLK_p:                                            // fall through
 	case SDLK_PAUSE:  toggle_pause( PS );                   break;
 	case SDLK_F3:     PS->debug = !PS->debug;               break;
+	case SDLK_F4:     set_test_status( GS );                break;
 	case SDLK_F11:    toggle_full_screen( PS );             break;
 	case SDLK_F12:    error_quit("User abort [F12]");       break;
 
@@ -567,10 +582,10 @@ void handle_joybuttondown( program_state_t* PS, game_state_t* GS, int button )
 void handle_joybuttonup( program_state_t* PS, game_state_t* GS, int button )
 {
 	switch (button) {
-		case 0:  handle_keyup( PS, GS, SDLK_UP );     break;
-		case 1:  handle_keyup( PS, GS, SDLK_RIGHT );  break;
-		case 2:  handle_keyup( PS, GS, SDLK_DOWN );   break;
-		case 3:  handle_keyup( PS, GS, SDLK_LEFT );   break;
+		case 0:  handle_keyup( PS, GS, SDLK_LCTRL );   break;
+		case 1:  handle_keyup( PS, GS, SDLK_LSHIFT );  break;
+		case 2:  handle_keyup( PS, GS, SDLK_LALT );    break;
+		case 9:  handle_keyup( PS, GS, SDLK_SPACE );   break;
 	}
 
 } // handle_joybuttonup

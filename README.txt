@@ -83,20 +83,31 @@ enemies. Better level design is in preparation.
 *******************************************************************************
 
 You may need to install a few packages before you can compile the program.
-Under Debian 7.1 I had to issue:
+
+Debian 7.1:
   $ sudo apt-get install \
     libsdl-image1.2-dev  \
     libsdl-ttf2.0-dev    \
     libsdl-mixer1.2-dev  \
     libsdl-gfx1.2-dev
 
-Under Fedora 20 I used:
+Fedora 20:
   $ su -c 'yum install  \
     gcc                 \
     SDL_image-devel     \
     SDL_ttf-devel       \
     SDL_mixer-devel     \
     SDL_gfx-devel
+
+Arch: clang complained about fabs returning an int, so I switched back to gcc.
+  # pacman -S \
+    clang     \
+    sdl       \
+    sdl_image \
+    sdl_ttf   \
+    sdl_mixer \
+    sdl_gfx   \
+    sdl_sound
 
 Mac:
   $ brew install \
