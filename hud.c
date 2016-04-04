@@ -425,9 +425,9 @@ void draw_current_enemy(
 	;
 
 	get_tier_color( tier, &R, &G, &B );
-	R *= filled ? 0.7 : 0.3 ;
-	G *= filled ? 0.7 : 0.3 ;
-	B *= filled ? 0.7 : 0.3 ;
+	R *= filled ? 0.8 : 0.1 ;
+	G *= filled ? 0.8 : 0.1 ;
+	B *= filled ? 0.8 : 0.1 ;
 	glColor3f( R, G, B );
 
 	glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );

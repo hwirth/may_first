@@ -245,6 +245,7 @@ BUGS:
 ! Fix background image (is not properly "endless", also copyright)
 ! Use correct BPP
 ! Fix text size (windowed mode?)
+! Malus if player takes a long time per wave instead of a bonus for distance
 ~ Rewrite: scene.c: Proper OpenGL usage
 ~ Improve: Multiple sounds played at the same time --> not all played.
 > Full documentation
