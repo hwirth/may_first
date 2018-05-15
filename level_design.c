@@ -221,7 +221,7 @@ void create_wave2(
 	}
 
 	// Create remaining amount as single enemies
-	for( fsize = 1 ; amount > 0 ; amount-- ) {
+	for( fsize = 1 ; amount > 0 ; amount-=2 ) {
 		f = &(GS->formations[fi]);
 		f->nr_ranks = create_formation(
 			GS, f, tier, fsize, fi, nr_units, offset_y
@@ -229,7 +229,6 @@ void create_wave2(
 		create_formation_enemies( GS, f, tier, fsize*fsize );
 
 		++fi;
-		--amount;
 	}
 
 	*formation_index = fi;

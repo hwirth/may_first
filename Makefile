@@ -2,6 +2,7 @@
 CC := clang
 TARGET := a.out
 SRCS := \
+	debug.c         \
 	gl_helpers.c    \
 	draw_frame.c    \
 	intro.c         \
@@ -10,7 +11,7 @@ SRCS := \
 	ui.c            \
 	game.c          \
 	level_design.c  \
-	formation.c	\
+	formation.c     \
 	world.c         \
 	player.c        \
 	enemy.c         \

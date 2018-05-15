@@ -13,7 +13,7 @@
 #define DRAW_BLACK_HOLES                 TRUE    //TRUE Visually show the holes on the grid
 #define BLACK_HOLES_SUCK                 TRUE    //TRUE Disabled: Player can fly over the holes
 #define BLACK_HOLES_DARKEN_SCREEN        TRUE    //TRUE Dim screen while approaching center of b.h.
-#define BLACK_HOLES_OPEN_ON_APPROACH     TRUE    //TRUE The nearer the shop, the larger the hole
+#define BLACK_HOLES_OPEN_ON_APPROACH     TRUE    //TRUE The nearer the ship, the larger the hole
 
 #define LIMIT_FORWARD_SPEEDING           TRUE    //FALSE Disable this to speed endlessly
 #define FIRE_DIAGONALLY                  FALSE   //FALSE Fire in the direction, the ship is moving (horizontally)
@@ -221,7 +221,7 @@
 #define INITIAL_RANDOM_SEED              93               // The random seed
 
 #define BONUS_FACTOR_SCORE               10               // Multipliers
-#define BONUS_FACTOR_DISTANCE            10
+#define BONUS_FACTOR_DISTANCE            (-10)
 #define BONUS_FACTOR_SPEED               25
 #define BONUS_FACTOR_BEST_RESOURCE       5
 #define BONUS_FACTOR_HIT_RATIO           25

@@ -348,7 +348,7 @@ void draw_hud_resource( program_state_t* PS, game_state_t* GS )
 		else {                    i = 500000;
 		}
 
-		GLfloat f = fabs((int)(Tc % i) - i/2) / ((GLfloat)i/2);
+		GLfloat f = fabs((double)((int)(Tc % i) - i/2)) / ((GLfloat)i/2);
 		R = R * f;
 		G = G * f;
 		B = B * f;
@@ -613,18 +613,8 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		"SCORE                               %7d",
 		score
 	);
-#ifdef DISABLED_CODE
-	hud_printf(
-		PS,
-		x,
-		y + (i--) * (PS->line_height),
-		ALIGN_CENTER, 0xAAAAAA,
-		"DISTANCE       %7d  x%7d  = %7d",
-		si->distance,
-		BONUS_FACTOR_DISTANCE,
-		BONUS_FACTOR_DISTANCE * si->distance
-	);
 
+#ifdef DISABLED_CODE
 	hud_printf(
 		PS,
 		x,
@@ -672,6 +662,21 @@ void hud_score_summary( program_state_t* PS, game_state_t* GS )
 		BONUS_FACTOR_BEST_RESOURCE,
 		BONUS_FACTOR_BEST_RESOURCE * si->best_resource
 	);
+
+#if DISABLED_CODE
+	--i;   // Omit one line
+
+	hud_printf(
+		PS,
+		x,
+		y + (i--) * (PS->line_height),
+		ALIGN_CENTER, 0xAAAAAA,
+		"DISTANCE       %7d  x%7d  = %7d",
+		si->distance,
+		BONUS_FACTOR_DISTANCE,
+		BONUS_FACTOR_DISTANCE * si->distance
+	);
+#endif
 
 	--i;   // Omit one line
 

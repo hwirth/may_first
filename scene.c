@@ -8,6 +8,8 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_opengl.h>
 
+#include <assert.h>
+
 #include "scene.h"
 #include "main.h"
 #include "game.h"
@@ -15,6 +17,7 @@
 #include "world.h"             // remove_explosion()
 #include "ui.h"
 #include "gl_helpers.h"
+#include "debug.h"
 
 
 // SCENE HELPER FUNCTIONS /////////////////////////////////////////////////////
@@ -989,6 +992,15 @@ void draw_scene( program_state_t* PS, game_state_t* GS )
  */
 void draw_game_frame( program_state_t* PS, game_state_t* GS )
 {
+/*
+	int err = glGetError();
+	if (err) {
+		printf("glGetError returned %04X.\n", err);
+		exit( -1 );
+	}
+*/
+	gl_debug();
+
 	int w = PS->window_width;
 	int h = PS->window_height;
 

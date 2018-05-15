@@ -239,6 +239,7 @@ BUGS:
 *******************************************************************************
 
 // TODO v1.0 //////////////////////////////////////////////////////////////////
+! Use only one screen in multi-head environment
 ! Credits in intro screen
 ! Recode sound track (Many systems won't have OGG support by default)
 ! Licensed media files only

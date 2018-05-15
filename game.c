@@ -254,8 +254,8 @@ int calculate_total_score( program_state_t* PS, game_state_t* GS )
 		+ si->current * si->hit_ratio / 100
 		+ si->current * si->speed / 100
 		+ si->best_resource * BONUS_FACTOR_BEST_RESOURCE
-#ifdef DISABLED_CODE
-		+ si->distance      * BONUS_FACTOR_DISTANCE
+#if DISABLED_CODE
+		+ si->distance       * BONUS_FACTOR_DISTANCE
 		+ GS->enemies_killed * BONUS_FACTOR_ENEMIES /
 			( (si->distance == 0) ? 1 : si->distance )
 #endif
